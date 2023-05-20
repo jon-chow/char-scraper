@@ -6,6 +6,7 @@ Last Modified: 2023-05-19
 """
 
 import json
+import os
 import colorama
 from colorama import Fore, Back, Style
 from main import scrape
@@ -15,18 +16,26 @@ colorama.init(autoreset=True)
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def test_scrape():
+def test_scrape(query="amber"):
   """Tests data scraping"""
-  query = "potato"
-  expected = json.load(open("test_data.json", "r"))
+  expected = json.load(open(f"tests/ex_{query}.json", "r"))
   actual = scrape(query=query)
-  assert (actual == expected), f"{Fore.RED}Test scraping for '{query}' failed!"
+  print(f"{Fore.CYAN}{json.dumps(actual, indent=2)}")
+  try:
+    assert (actual == expected)
+  except AssertionError as e:
+    print(f"{Fore.RED}Test scraping for {Fore.YELLOW}{query.capitalize()} {Fore.RED}failed!")
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
 # ---------------------------------------------------------------------------- #
 def test():
-  test_scrape()
+  # Read all names of files in tests folder.
+  files = os.listdir("tests")
+  for file in files:
+    if file.startswith("ex_"):
+      query = file[3:-5]
+      test_scrape(query=query)
 
 if __name__ == "__main__":
   test()
