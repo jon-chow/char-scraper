@@ -29,7 +29,7 @@ $ python3 main.py characters amber lisa
 $ make run characters amber lisa
 ```
 
-For characters with multi-word names, wrap their name around quotations. For example, to scrape `"Kaedehara Kazuha"` and `"Kamisato Ayaka"`, run the following command:
+For characters with multi-word names, wrap their name around quotations (Python) or use hyphens (Make). For example, to scrape `"Kaedehara Kazuha"` and `"Kamisato Ayaka"`, run the following command:
 
 #### With Python:
 ```bash
@@ -38,7 +38,7 @@ $ python3 main.py characters "kaedehara kazuha" "kamisato ayaka"
 
 #### With Make:
 ```bash
-$ make run characters "kaedehara kazuha" "kamisato ayaka"
+$ make run characters kaedehara-kazuha kamisato-ayaka
 ```
 
 ## License

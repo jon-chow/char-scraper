@@ -24,7 +24,7 @@ def create_json(mode=DEFAULT_MODE, folders=FOLDERS, lang=LANG):
     for (folder) in folders:
         folder_dir = f"{DATA_SAVE_DIR}{mode}/{folder.lower().replace(' ', '-')}"
         try:
-            data = scrape(mode=mode, query=folder.title().replace(' ', '_'))
+            data = scrape(mode=mode, query=folder.replace('-', ' ').title().replace(' ', '_'))
             # Create directory if it doesn't exist.
             if not os.path.exists(folder_dir):
                 os.makedirs(folder_dir)
