@@ -11,15 +11,7 @@ import re
 import requests
 import sys
 from bs4 import BeautifulSoup
-
-# ---------------------------------------------------------------------------- #
-#                             CONSTANTS / VARIABLES                            #
-# ---------------------------------------------------------------------------- #
-URL = "https://genshin-impact.fandom.com/wiki/"
-DATA_SAVE_DIR = "assets/data/characters/"
-IMG_SAVE_DIR = "assets/images/characters/"
-FOLDERS = ["amber", "kaeya", "lisa"]
-LANG = "en"
+from settings import *
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
