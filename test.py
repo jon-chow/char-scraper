@@ -9,7 +9,7 @@ import json
 import os
 import colorama
 from colorama import Fore, Back, Style
-from main import scrape
+from scraper import scrape
 
 colorama.init(autoreset=True)
 
