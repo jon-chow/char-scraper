@@ -2,7 +2,7 @@
 
 Author: jon-chow
 Created: 2023-05-19
-Last Modified: 2023-05-19
+Last Modified: 2023-05-20
 """
 
 import json
@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 URL = "https://genshin-impact.fandom.com/wiki/"
 DATA_SAVE_DIR = "assets/data/characters/"
 IMG_SAVE_DIR = "assets/images/characters/"
-FOLDERS = ["potato"]
+FOLDERS = ["amber", "kaeya", "lisa"]
 LANG = "en"
 
 # ---------------------------------------------------------------------------- #
@@ -224,14 +224,14 @@ def scrape(url=URL, query=""):
 def create_json(folders=FOLDERS, file_name=LANG):
     """Generates JSON files for each folder."""
     for (folder) in folders:
-        folder_dir = f"{DATA_SAVE_DIR}{folder}"
+        folder_dir = f"{DATA_SAVE_DIR}{folder.lower().replace(' ', '-')}"
         # Create directory if it doesn't exist.
         if not os.path.exists(folder_dir):
             os.makedirs(folder_dir)
         
         # Create and store JSON data.
         with open(f"{folder_dir}/{file_name}.json", "w") as f:
-            data = scrape(query=folder)
+            data = scrape(query=folder.title().replace(' ', '_'))
             json.dump(data, f, indent=2)
 
 
