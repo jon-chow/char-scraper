@@ -36,16 +36,38 @@ def scrape_characters(mode=DEFAULT_MODE, url=URL, query=""):
     data["title"] = char_info_div.find("h2", {"data-item-name": "secondary_title"}).text.strip()
     data["vision"] = char_info_div.find("td", {"data-source": "element"}).text.strip()
     data["weapon"] = char_info_div.find("td", {"data-source": "weapon"}).text.strip()
+    
     if re.search("Female", char_details_div.find("a", {"title": "Model Type"}).find_parent("h3").find_next_sibling("div").text.strip()):
         data["gender"] = "Female"
     else:
         data["gender"] = "Male"
-    data["nation"] = char_details_div.find("div", {"data-source": "region"}).find("a").text.strip()
-    data["affiliation"] = char_details_div.find("div", {"data-source": "affiliation"}).find("a").text.strip()
-    data["specialDish"] = char_details_div.find("div", {"data-source": "dish"}).find("span", {"class": "item_text"}).text.strip()
+    
+    if query != "Aloy":
+        nation_div = char_details_div.find("div", {"data-source": "region"}).find("h3").find_next_sibling()
+        if nation_div.find("ul"):
+            data["nation"] = nation_div.find_all("li")[0].text.strip()
+        elif nation_div.find("a"):
+            data["nation"] = nation_div.text.strip()
+        else:
+            data["nation"] = nation_div.text.strip()
+        data["nation"] = data["nation"].replace(" (in-game)", "")
+    else:
+        data["nation"] = "Outlander"
+    
+    affiliations_div = char_details_div.find("div", {"data-source": "affiliation"}).find("h3").find_next_sibling()
+    if affiliations_div.find("ul"):
+        data["affiliation"] = affiliations_div.find_all("li")[0].text.strip()
+    elif affiliations_div.find("a"):
+        data["affiliation"] = affiliations_div.text.strip()
+    else:
+        data["affiliation"] = affiliations_div.text.strip()
+    data["affiliation"] = data["affiliation"].replace(" (on profile)", "")
+    
+    data["specialDish"] = char_details_div.find("div", {"data-source": "dish"}).find("h3").find_next_sibling().text.strip()
+    data["namecard"] = char_details_div.find("div", {"data-source": "namecard"}).find("h3").find_next_sibling().text.strip()
     data["rarity"] = get_int_from_string(char_info_div.find("td", {"data-source": "quality"}).find("img").get("alt"))
-    data["constellation"] = char_details_div.find("div", {"data-source": "constellation"}).find("div").find("a").text.strip()
-    data["birthday"] = get_birthday_from_string(char_details_div.find("div", {"data-source": "birthday"}).find("div").find("a").text.strip())
+    data["constellation"] = char_details_div.find("div", {"data-source": "constellation"}).find("h3").find_next_sibling().text.strip().replace(" (Story Quest Chapter)", "")
+    data["birthday"] = get_birthday_from_string(char_details_div.find("div", {"data-source": "birthday"}).find("h3").find_next_sibling().text.strip())
     data["description"] = soup2.find_all("p", {"class": "pull-quote__text"})[1].text.strip().replace("\u2014", "-")
     
     # Get skill talents data.
