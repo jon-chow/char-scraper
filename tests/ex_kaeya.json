@@ -15,7 +15,7 @@
     {
       "name": "Ceremonial Bladework",
       "unlock": "Normal Attack",
-      "description": "Normal Attack\nPerforms up to 5 consecutive strikes.\nCharged Attack\nConsumes a certain amount of Stamina to unleash 2 rapid sword strikes.\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging enemeies along the path and dealing AoE DMG upon impact.",
+      "description": "Normal Attack\nPerforms up to 5 rapid strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
       "upgrades": [
         {
           "name": "1-Hit DMG",
@@ -39,7 +39,7 @@
         },
         {
           "name": "Charged Attack DMG",
-          "value": "55% + 73.1%"
+          "value": "55.0% + 73.1%"
         },
         {
           "name": "Charged Attack Stamina Cost",
@@ -51,7 +51,7 @@
         },
         {
           "name": "Low / High Plunge DMG",
-          "value": "128% / 160%"
+          "value": "127.8% / 159.7%"
         }
       ],
       "type": "NORMAL_ATTACK"
@@ -59,11 +59,11 @@
     {
       "name": "Frostgnaw",
       "unlock": "Elemental Skill",
-      "description": "Unleashes a frigit blast, dealing Cryo DMG to enemies in front of Kaeya.",
+      "description": "Unleashes a frigid blast, dealing Cryo DMG to opponents in front of Kaeya.",
       "upgrades": [
         {
           "name": "Skill DMG",
-          "value": "191%"
+          "value": "191.2%"
         },
         {
           "name": "CD",
@@ -75,7 +75,7 @@
     {
       "name": "Glacial Waltz",
       "unlock": "Elemental Burst",
-      "description": "Coalescing the frost in the air, Kaeya summons 3 icicles that revolve around him.\n\nThese icicles will follow the character around and deal Cryo DMG to enemies in their path for so long as they persist.",
+      "description": "Coalescing the frost in the air, Kaeya summons 3 icicles that revolve around him.\nThese icicles will follow the character around and deal Cryo DMG to opponents in their path for the ability's duration.",
       "upgrades": [
         {
           "name": "Skill DMG",
@@ -101,32 +101,32 @@
     {
       "name": "Cold-Blooded Strike",
       "unlock": "Unlocked at Ascension 1",
-      "description": "Every hit with Frostgnaw regenerates HP for Kaeya equal to 15% of ATK.",
+      "description": "Every hit with Frostgnaw regenerates HP for Kaeya equal to 15% of his ATK.",
       "level": 1
     },
     {
       "name": "Glacial Heart",
       "unlock": "Unlocked at Ascension 4",
-      "description": "Enemies Frozen by Frostgnaw will drop additional Elemental Particles.\nFrostgnaw may only produce a maximum of 2 additional Elemental Particles per use.",
+      "description": "Opponents Frozen by Frostgnaw will drop additional Elemental Particles.\nFrostgnaw may only produce a maximum of 2 additional Elemental Particles per use.",
       "level": 4
     },
     {
       "name": "Hidden Strength",
       "unlock": "Unlocked Automatically",
-      "description": "Decreases all party member's sprinting Stamina consumption by 20%."
+      "description": "Decreases sprinting Stamina consumption for your own party members by 20%.\nNot stackable with Passive Talents that provide the exact same effects."
     }
   ],
   "constellations": [
     {
       "name": "Excellent Blood",
       "unlock": "Constellation Lv. 1",
-      "description": "The CRIT Rate of Normal Attack and Charged Attack DMG against enemies affected by the Cold or Frozen status effects is increased by 15%.",
+      "description": "The CRIT Rate of Kaeya's Normal and Charge Attacks against opponents affected by Cryo is increased by 15%.",
       "level": 1
     },
     {
       "name": "Never-Ending Performance",
       "unlock": "Constellation Lv. 2",
-      "description": "Every time Glacial Waltz defeats an enemy, its duration is increased by 2.5s, up to a maximum of 15s.",
+      "description": "When Glacial Waltz is in effect, for each opponent defeated, its base duration is increased by 2.5s, up to a maximum of 15s.",
       "level": 2
     },
     {
@@ -144,7 +144,7 @@
     {
       "name": "Frostbiting Embrace",
       "unlock": "Constellation Lv. 5",
-      "description": "Increase the Level of Glacial Waltz by 3.\nMaximum upgrade level is 15.",
+      "description": "Increases the Level of Glacial Waltz by 3.\nMaximum upgrade level is 15.",
       "level": 5
     },
     {

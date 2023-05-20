@@ -59,6 +59,9 @@ def get_birthday_from_string(string):
     """Extracts birthday from string."""
     month = convert_month_to_num(string.split(" ")[0])
     day = string.split(" ")[1][:-2]
+    # Add leading zero if day is single digit.
+    if len(day) == 1:
+        day = f"0{day}"
     return f"0000-{month}-{day}"
 
 
@@ -215,7 +218,6 @@ def scrape(url=URL, query=""):
         data["weapon_type"] = data["weapon"].upper()
     except:
         print(f"Error: Could not scrape {URL}{query}.")
-    
     return data
 
 
