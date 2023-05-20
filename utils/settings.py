@@ -11,8 +11,10 @@ from enum import Enum
 
 class Mode(Enum):
     """Enum for mode."""
+    ARTIFACTS = "artifacts"
     CLEAN = "clean"
     CHARACTERS = "characters"
+    WEAPONS = "weapons"
 
 # ---------------------------------------------------------------------------- #
 #                                  MODIFIABLES                                 #

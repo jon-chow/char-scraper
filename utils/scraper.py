@@ -14,14 +14,23 @@ from utils.scrapers.characters import scrape_characters
 def scrape(mode=DEFAULT_MODE, url=URL, query=""):
     """Scrapes HTML data of characters from given URL."""
     data = {}
-    
     match mode:
+        # Scrape artifact data.
+        case Mode.ARTIFACTS.value:
+            raise Exception(f"Mode not implemented yet.")
+
         # Scrape character data.
         case Mode.CHARACTERS.value:
             try:
-                scrape_characters(mode, url, query)
+                data = scrape_characters(mode, url, query)
             except:
-                raise Exception(f"Error: Failed to scrape character {query}.")
+                raise Exception(f"Failed to scrape character {query}.")
+        
+        # Scrape weapons data.
+        case Mode.WEAPONS.value:
+            raise Exception(f"Mode not implemented yet.")
+        
+        # Unknown mode.
         case _:
             raise Exception(f"Unknown mode ({mode}) selected.")
     return data

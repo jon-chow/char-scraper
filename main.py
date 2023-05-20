@@ -34,7 +34,7 @@ def create_json(mode=DEFAULT_MODE, folders=FOLDERS, lang=LANG):
                 print(f"{Fore.CYAN}Created {folder_dir}/{lang}.json")
         except Exception as e:
             # Failed to create JSON file.
-            print(f"{Fore.RED}{e}")
+            print(f"{Fore.RED}Error: {e}")
 
 
 def clean_up(folders=""):
@@ -67,6 +67,11 @@ def main():
         mode = sys.argv[1]
         
         match mode:
+            # Artifacts mode.
+            case Mode.ARTIFACTS.value:
+                raise Exception(f"Mode not implemented yet.")
+            
+            # Characters mode.
             case Mode.CHARACTERS.value:
                 # Get folders from command line arguments if they exist.
                 if len(sys.argv) > 2:
@@ -74,6 +79,12 @@ def main():
                     create_json(mode=mode, folders=folders)
                 else:
                     create_json(mode=mode)
+            
+            # Weapons mode.
+            case Mode.WEAPONS.value:
+                raise Exception(f"Mode not implemented yet.")
+            
+            # Clean mode.
             case Mode.CLEAN.value:
                 # Get folders from command line arguments if they exist.
                 if len(sys.argv) > 2:
@@ -81,12 +92,15 @@ def main():
                     clean_up(folders=folders)
                 else:
                     clean_up()
+            
+            # Unknown mode.
             case _:
-                print(f"{Fore.RED}Error: Invalid mode. Exiting...")
-                sys.exit(1)
+                raise Exception(f"Invalid mode '{mode}' does not exist.")
     else:
-        print(f"{Fore.RED}Error: No arguments passed. Exiting...")
-        sys.exit(1)
-    
+        raise Exception(f"No arguments were passed.")
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"{Fore.RED}Error: {e}")
