@@ -9,16 +9,19 @@ import json
 import os
 import colorama
 from colorama import Fore, Back, Style
-from scraper import scrape
+
+from utils.scraper import scrape
 
 colorama.init(autoreset=True)
+
+TESTS_DIR = "tests"
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
 def test_scrape(query="amber"):
   """Tests data scraping."""
-  expected = json.load(open(f"tests/ex_{query}.json", "r"))
+  expected = json.load(open(f"{TESTS_DIR}/ex_{query}.json", "r"))
   actual = scrape(query=query)
   try:
     assert (actual == expected)
@@ -35,8 +38,7 @@ def test_scrape(query="amber"):
 def test():
   """Main function for testing."""
   progress = { "passes": 0, "fails": 0 }
-  # Read all names of files in tests folder.
-  files = os.listdir("tests")
+  files = os.listdir(TESTS_DIR)
   for file in files:
     if file.startswith("ex_"):
       query = file[3:-5]

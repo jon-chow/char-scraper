@@ -11,6 +11,7 @@ from enum import Enum
 
 class Mode(Enum):
     """Enum for mode."""
+    CLEAN = "clean"
     CHARACTERS = "characters"
 
 # ---------------------------------------------------------------------------- #
