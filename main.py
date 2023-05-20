@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 # ---------------------------------------------------------------------------- #
 URL = "https://en.wikipedia.org/wiki/"
 DATA_SAVE_DIR = "assets/data/"
-IMG_SAVE_DIR = "assets/img/"
+IMG_SAVE_DIR = "assets/images/"
 FOLDERS = ["potato"]
 LANG = "en"
 

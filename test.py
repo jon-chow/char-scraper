@@ -6,20 +6,21 @@ Last Modified: 2023-05-19
 """
 
 import json
-from main import scrape, create_json, clean_up
+import colorama
+from colorama import Fore, Back, Style
+from main import scrape
 
-TEST_DATA = json.load(open("test_data.json", "r"))
+colorama.init(autoreset=True)
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
 def test_scrape():
   """Tests data scraping"""
-  expected = TEST_DATA
-  actual = scrape()
-  assert (actual == expected), "Scraping failed."
-
-
+  query = "potato"
+  expected = json.load(open("test_data.json", "r"))
+  actual = scrape(query=query)
+  assert (actual == expected), f"{Fore.RED}Test scraping for '{query}' failed!"
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
@@ -29,4 +30,4 @@ def test():
 
 if __name__ == "__main__":
   test()
-  print("Everything passed")
+  print(f"{Fore.GREEN}All tests passed!")
