@@ -8,36 +8,55 @@ Last Modified: 2023-05-20
 import json
 import os
 import sys
+import colorama
+from colorama import Fore, Back, Style
 
 from utils.settings import *
 from utils.scraper import scrape
 
+colorama.init(autoreset=True)
+
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def create_json(mode=DEFAULT_MODE, folders=FOLDERS, file_name=LANG):
+def create_json(mode=DEFAULT_MODE, folders=FOLDERS, lang=LANG):
     """Generates JSON files for each folder."""
     for (folder) in folders:
         folder_dir = f"{DATA_SAVE_DIR}{mode}/{folder.lower().replace(' ', '-')}"
-        # Create directory if it doesn't exist.
-        if not os.path.exists(folder_dir):
-            os.makedirs(folder_dir)
-        
-        # Create and store JSON data.
-        with open(f"{folder_dir}/{file_name}.json", "w") as f:
+        try:
             data = scrape(mode=mode, query=folder.title().replace(' ', '_'))
-            json.dump(data, f, indent=2)
+            # Create directory if it doesn't exist.
+            if not os.path.exists(folder_dir):
+                os.makedirs(folder_dir)
+            # Create JSON file.
+            with open(f"{folder_dir}/{lang}.json", "w") as f:
+                json.dump(data, f, indent=2)
+                print(f"{Fore.CYAN}Created {folder_dir}/{lang}.json")
+        except Exception as e:
+            # Failed to create JSON file.
+            print(f"{Fore.RED}{e}")
 
 
-def clean_up(folders=FOLDERS):
+def clean_up(folders=""):
     """Removes specified folders and its files."""
-    for (folder) in folders:
-        folder_dir = f"{DATA_SAVE_DIR}/characters/{folder}"
-        # Remove files and directory if it exists.
+    folder_dir = f"{DATA_SAVE_DIR}characters"
+    if folders == "":
+        # Remove all files and directories in the data save directory.
         if os.path.exists(folder_dir):
             for file in os.listdir(folder_dir):
-                os.remove(f"{folder_dir}/{file}")
-            os.rmdir(folder_dir)
+                for subfile in os.listdir(f"{folder_dir}/{file}"):
+                    os.remove(f"{folder_dir}/{file}/{subfile}")
+                os.rmdir(f"{folder_dir}/{file}")
+                print(f"{Fore.CYAN}Removed {folder_dir}/{file}")
+    else:
+        # Remove specified files and directory if they exist.
+        for (folder) in folders:
+            folder_dir = f"{folder_dir}/{folder}"
+            if os.path.exists(folder_dir):
+                for file in os.listdir(folder_dir):
+                    os.remove(f"{folder_dir}/{file}")
+                os.rmdir(folder_dir)
+                print(f"{Fore.CYAN}Removed {folder_dir}")
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
@@ -63,10 +82,10 @@ def main():
                 else:
                     clean_up()
             case _:
-                print("Invalid mode. Exiting...")
+                print(f"{Fore.RED}Error: Invalid mode. Exiting...")
                 sys.exit(1)
     else:
-        print("No arguments passed. Exiting...")
+        print(f"{Fore.RED}Error: No arguments passed. Exiting...")
         sys.exit(1)
     
 if __name__ == "__main__":

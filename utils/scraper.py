@@ -171,7 +171,7 @@ def scrape(mode=DEFAULT_MODE, url=URL, query=""):
                 data["vision_key"] = data["vision"].upper()
                 data["weapon_type"] = data["weapon"].upper()
             except:
-                print(f"Error: Could not scrape {URL}{query}.")
+                raise Exception(f"Error: Failed to scrape {URL}{query}.")
         case _:
-            print("Unknown mode selected.")
+            raise Exception(f"Unknown mode ({mode}) selected.")
     return data
