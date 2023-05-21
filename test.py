@@ -26,28 +26,29 @@ TESTS_DIR = "tests"
 # ---------------------------------------------------------------------------- #
 def test_get_all_names(test_function, expected):
   """Tests retrieving all names for a given test function."""
-  actual = test_function()
-  actual = actual[:1] + actual[-1:]
   try:
+    actual = test_function()
+    actual = actual[:1] + actual[-1:]
     assert (actual == expected)
-    print(f"{Fore.GREEN}Test get_all_{test_function.__name__}() passed!")
+    print(f"{Fore.GREEN}Test {test_function.__name__}() passed!")
     return True
-  except AssertionError as e:
-    print(f"{Fore.RED}Test get_all_{test_function.__name__}() failed!")
+  except Exception as e:
+    print(f"{Fore.RED}Test {test_function.__name__}() failed!")
     return False
 
 
 def test_scrape(category="characters", query="amber"):
-  """Tests data scraping."""
+  """Tests scraping data from category."""
   expected = json.load(open(f"{TESTS_DIR}/{category}/ex_{query}.json", "r"))
-  actual = scrape(category=category, query=query)
   try:
+    query = query.replace("-", " ").title()
+    actual = scrape(category=category, query=query)
     assert (actual == expected)
-    print(f"{Fore.GREEN}Test scraping for {Fore.YELLOW}{query.capitalize()} {Fore.GREEN}passed!")
+    print(f"{Fore.GREEN}Test scrape() for {Fore.YELLOW}{query.title()} {Fore.GREEN}passed!")
     return True
-  except AssertionError as e:
+  except Exception as e:
     # print(f"{Fore.CYAN}{json.dumps(actual, indent=2)}")
-    print(f"{Fore.RED}Test scraping for {Fore.YELLOW}{query.capitalize()} {Fore.RED}failed!")
+    print(f"{Fore.RED}Test scrape() for {Fore.YELLOW}{query.capitalize()} {Fore.RED}failed!")
     return False
 
 # ---------------------------------------------------------------------------- #
@@ -66,22 +67,31 @@ def test():
     progress['fails'] += 1
   
   print(f"{Fore.CYAN}\nTesting getting all names of items...")
-  functions_to_test = [
-    {"name": get_all_artifact_names, "expected": ["Adventurer", "Vourukasha's Glow"]},
-    {"name": get_all_character_names, "expected": ["Albedo", "Zhongli"]},
-    {"name": get_all_weapon_names, "expected": ["A Thousand Floating Dreams", "Waster Greatsword"]},
+  FUNCTIONS_TO_TEST = [
+    {
+      "function": get_all_artifact_names,
+      "expected": ["Adventurer", "Vourukasha's Glow"]
+    },
+    {
+      "function": get_all_character_names,
+      "expected": ["Albedo", "Zhongli"]
+    },
+    {
+      "function": get_all_weapon_names,
+      "expected": ["A Thousand Floating Dreams", "Waster Greatsword"]
+    },
   ]
-  for test in functions_to_test:
-    if test_get_all_names(test_function=test['name'], expected=test['expected']):
+  for test in FUNCTIONS_TO_TEST:
+    if test_get_all_names(test_function=test['function'], expected=test['expected']):
       passed()
     else:
       failed()
   
   # Testing: scrape().
-  print(f"{Fore.CYAN}\nTesting scraper...")
   folders = os.listdir(TESTS_DIR)
   for file in folders:
     category = file
+    print(f"{Fore.CYAN}\nTesting {category} scraper...")
     for file in os.listdir(f"{TESTS_DIR}/{category}"):
       if file.startswith("ex_"):
         query = file[3:-5]

@@ -1,0 +1,12 @@
+{
+  "name": "Calamity Queller",
+  "type": "Polearm",
+  "rarity": 5,
+  "baseAttack": "49",
+  "subStat": "ATK",
+  "subStatBase": "3.6%",
+  "passiveName": "Extinguishing Precept",
+  "passiveDesc": "Gain 12% All Elemental DMG Bonus. Obtain Consummation for 20s after using an Elemental Skill, causing ATK to increase by 3.2% per second. This ATK increase has a maximum of 6 stacks. When the character equipped with this weapon is not on the field, Consummation's ATK increase is doubled.",
+  "location": "Gacha",
+  "ascensionMaterial": "Mist Veiled Lead Elixir"
+}

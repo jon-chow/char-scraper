@@ -1,0 +1,12 @@
+{
+  "name": "Amos' Bow",
+  "type": "Bow",
+  "rarity": 5,
+  "baseAttack": "46",
+  "subStat": "ATK",
+  "subStatBase": "10.8%",
+  "passiveName": "Strong-Willed",
+  "passiveDesc": "Increases Normal Attack and Charged Attack DMG by 12%. After a Normal or Charged Attack is fired, DMG dealt increases by a further 8% every 0.1 seconds the arrow is in the air for up to 5 times.",
+  "location": "Gacha",
+  "ascensionMaterial": "Fetters of the Dandelion Gladiator"
+}

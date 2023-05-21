@@ -1,0 +1,12 @@
+{
+  "name": "Dull Blade",
+  "type": "Sword",
+  "rarity": 1,
+  "baseAttack": "23",
+  "subStat": "-",
+  "subStatBase": "-",
+  "passiveName": "-",
+  "passiveDesc": "-",
+  "location": "Chest",
+  "ascensionMaterial": "Tile of Decarabian's Tower"
+}

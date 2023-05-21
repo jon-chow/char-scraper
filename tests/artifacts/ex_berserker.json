@@ -1,0 +1,6 @@
+{
+  "name": "Berserker",
+  "max_rarity": "4",
+  "2-piece_bonus": "2-Piece Bonus\nCRIT Rate +12%",
+  "4-piece_bonus": "4-Piece Bonus\nWhen HP is below 70%, CRIT Rate increases by an additional 24%."
+}
