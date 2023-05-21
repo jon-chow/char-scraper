@@ -2,7 +2,7 @@
 
 Author: jon-chow
 Created: 2023-05-20
-Last Modified: 2023-05-20
+Last Modified: 2023-05-21
 """
 
 import re
@@ -243,7 +243,7 @@ def scrape_characters(query=""):
             outfitSoup = BeautifulSoup(outfitRes.content, "lxml")
             
             outfit_desc_div = outfitSoup.find("aside", {"role": "region"})
-            outfit_desc = outfit_desc_div.find("div", {"data-source": "description"}).find("div").text.strip()
+            outfit_desc = outfit_desc_div.find("div", {"data-source": "description"}).find("div").text.strip().replace("\u2014", "-")
             
             if outfit_type == "Alternate":
                 price = 0
