@@ -69,7 +69,7 @@ def scrape_weapons(query=""):
     stats_info_div = weapon_info_div.find("a", {"title": "Attribute"}).find_parent("h2").find_next_sibling("section").find("section")
     
     # Get weapon data.
-    data["name"] = weapon_info_div.find("h2", {"data-source": "title"}).text.strip()
+    data["name"] = soup.find("span", {"class": "mw-page-title-main"}).text.strip()
     data["type"] = weapon_info_div.find("div", {"data-source": "type"}).find("div").text.strip()
     data["rarity"] = get_int_from_string(weapon_info_div.find("div", {"data-source": "quality"}).find("img").get("alt"))
     data["baseAttack"] = stats_info_div.find_all("section")[1].find("div").text.strip().split(" - ")[0]

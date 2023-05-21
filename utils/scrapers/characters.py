@@ -34,7 +34,12 @@ def get_all_character_names():
     for tr in playable_characters_div.find_all("tr"):
         try:
             name = tr.find("td").find("a").get("title")
-            names.append(name)
+            if name != "Traveler":
+                names.append(name)
+            else:
+                elements = ["Unaligned", "Anemo", "Geo", "Electro", "Dendro"] # "Hydro", "Pyro", "Cryo"
+                for element in elements:
+                    names.append(f"Traveler ({element})")
         except:
             pass
     
@@ -43,10 +48,22 @@ def get_all_character_names():
     else:
         return False
 
+# TODO: Implement
+def scrape_travelers(resonance="Anemo"):
+    """Scrape traveler data from the wiki."""
+    data = {}
+
+    return data
+
 
 def scrape_characters(query=""):
     """Scrape character data from the wiki."""
     data = {}
+    
+    # If the character is traveler, scrape for traveler data instead.
+    if "Traveler" in query:
+        resonance = query.split(" ")[1].replace("(", "").replace(")", "")
+        return scrape_travelers(resonance)
     
     query = query.replace('-', ' ').replace("'", '').replace('"', '').replace(' ', '_').title()
     

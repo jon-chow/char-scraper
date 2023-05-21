@@ -9,7 +9,7 @@ from enum import Enum
 
 class Functions(Enum):
     """Enum for functions."""
-    CLEAN = "clean"
+    CLEAR = "clear"
     CREATE = "create"
 
 class Category(Enum):

@@ -1,6 +1,6 @@
-# CHAR SCRAPER
+# GENSHIN SCRAPER
 ## Description
-This is a scraper for characters from the game "Genshin Impact". Data is scraped from [Fandom](https://genshin-impact.fandom.com/wiki/Genshin_Impact_Wiki), processed, and stored in JSON files. My intent is to add this data to the [genshin.dev API](https://github.com/genshindev/api) project.
+This is a scraper for data on things from the game "Genshin Impact". Data is scraped from [Fandom](https://genshin-impact.fandom.com/wiki/Genshin_Impact_Wiki), processed, and stored in JSON files. My intent is to add this data to the [genshin.dev API](https://github.com/genshindev/api) project.
 
 ## Prerequisites
 - [Python](https://www.python.org/downloads/) ^3.11.0

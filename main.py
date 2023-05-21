@@ -27,7 +27,7 @@ def create_json(category=DEFAULT_CATEGORY, folders=[], lang=LANG):
     
     # Create JSON files for each folder.
     for (folder) in folders:
-        folder_name = folder.replace(' ', '-').replace("'", '').replace('"', '').lower()
+        folder_name = folder.replace(' ', '-').replace("'", '').replace('"', '').replace('(', '').replace(')', '').lower()
         folder_dir = f"{DATA_SAVE_DIR}{category}/{folder_name}"
         try:
             data = scrape(category=category, query=folder)
@@ -43,11 +43,11 @@ def create_json(category=DEFAULT_CATEGORY, folders=[], lang=LANG):
             print(f"{Fore.RED}Error: {e}")
 
 
-def clean_up(category=DEFAULT_CATEGORY, folders=""):
+def clear(category=DEFAULT_CATEGORY, folders=[]):
     """Removes specified folders and its files."""
-    folder_dir = f"{DATA_SAVE_DIR}{category}"
-    if folders == "":
+    if folders == []:
         # Remove all files and directories in the data save directory.
+        folder_dir = f"{DATA_SAVE_DIR}{category}"
         if os.path.exists(folder_dir):
             for file in os.listdir(folder_dir):
                 for subfile in os.listdir(f"{folder_dir}/{file}"):
@@ -57,7 +57,7 @@ def clean_up(category=DEFAULT_CATEGORY, folders=""):
     else:
         # Remove specified files and directory if they exist.
         for (folder) in folders:
-            folder_dir = f"{folder_dir}/{folder}"
+            folder_dir = f"{DATA_SAVE_DIR}{category}/{folder}"
             if os.path.exists(folder_dir):
                 for file in os.listdir(folder_dir):
                     os.remove(f"{folder_dir}/{file}")
@@ -74,15 +74,13 @@ def main():
         category = sys.argv[2]
         
         match function:
-            # Clean function.
-            case Functions.CLEAN.value:
-                print(f"{Fore.CYAN}Cleaning up data directory...")
-                # Get folders from command line arguments if they exist.
+            # Clear function.
+            case Functions.CLEAR.value:
                 if len(sys.argv) > 3:
                     folders = sys.argv[3:]
-                    clean_up(category=category, folders=folders)
+                    clear(category=category, folders=folders)
                 else:
-                    clean_up(category=category)
+                    clear(category=category)
             
             # Create function.
             case Functions.CREATE.value:
