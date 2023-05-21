@@ -19,18 +19,18 @@ colorama.init(autoreset=True)
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def create_json(mode=DEFAULT_MODE, folders=[], lang=LANG):
+def create_json(category=DEFAULT_CATEGORY, folders=[], lang=LANG):
     """Generates JSON files for each folder."""
     # Get all if none are specified.
     if folders == []:
-        folders = get_all_names(mode=mode)
+        folders = get_all_names(category=category)
     
     # Create JSON files for each folder.
     for (folder) in folders:
         folder_name = folder.replace(' ', '-').replace("'", '').replace('"', '').lower()
-        folder_dir = f"{DATA_SAVE_DIR}{mode}/{folder_name}"
+        folder_dir = f"{DATA_SAVE_DIR}{category}/{folder_name}"
         try:
-            data = scrape(mode=mode, query=folder)
+            data = scrape(category=category, query=folder)
             # Create directory if it doesn't exist.
             if not os.path.exists(folder_dir):
                 os.makedirs(folder_dir)
@@ -43,9 +43,9 @@ def create_json(mode=DEFAULT_MODE, folders=[], lang=LANG):
             print(f"{Fore.RED}Error: {e}")
 
 
-def clean_up(mode=DEFAULT_MODE, folders=""):
+def clean_up(category=DEFAULT_CATEGORY, folders=""):
     """Removes specified folders and its files."""
-    folder_dir = f"{DATA_SAVE_DIR}{mode}"
+    folder_dir = f"{DATA_SAVE_DIR}{category}"
     if folders == "":
         # Remove all files and directories in the data save directory.
         if os.path.exists(folder_dir):
@@ -71,7 +71,7 @@ def main():
     """Main function."""
     if len(sys.argv) > 2:
         function = sys.argv[1]
-        mode = sys.argv[2]
+        category = sys.argv[2]
         
         match function:
             # Clean function.
@@ -80,21 +80,21 @@ def main():
                 # Get folders from command line arguments if they exist.
                 if len(sys.argv) > 3:
                     folders = sys.argv[3:]
-                    clean_up(mode=mode, folders=folders)
+                    clean_up(category=category, folders=folders)
                 else:
-                    clean_up(mode=mode)
+                    clean_up(category=category)
             
             # Create function.
             case Functions.CREATE.value:
                 try:
                     if len(sys.argv) > 3:
                         folders = sys.argv[3:]
-                        create_json(mode=mode, folders=folders)
+                        create_json(category=category, folders=folders)
                     else:
-                        create_json(mode=mode)
+                        create_json(category=category)
                 except Exception as e:
-                    # Unknown mode.
-                    raise Exception(f"Invalid mode '{mode}' does not exist.")
+                    # Unknown category.
+                    raise Exception(f"Invalid category '{category}' does not exist.")
             
             # Unknown function.
             case _:

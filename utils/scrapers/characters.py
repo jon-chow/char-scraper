@@ -7,10 +7,14 @@ Last Modified: 2023-05-20
 
 import re
 import requests
+import lxml
+import cchardet
 from bs4 import BeautifulSoup
 
 from utils.settings import *
 from utils.helpers import *
+
+requests_session = requests.Session()
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -20,8 +24,8 @@ def get_all_character_names():
     names = []
     
     # Get HTML data from main page.
-    response = requests.get("https://genshin-impact.fandom.com/wiki/Character/List")
-    soup = BeautifulSoup(response.content, "html.parser")
+    response = requests_session.get("https://genshin-impact.fandom.com/wiki/Character/List")
+    soup = BeautifulSoup(response.content, "lxml")
     
     # Find playable characters list.
     playable_characters_div = soup.find("span", {"id": "Playable_Characters"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
@@ -47,12 +51,12 @@ def scrape_characters(query=""):
     query = query.replace('-', ' ').replace("'", '').replace('"', '').replace(' ', '_').title()
     
     # Get HTML data from main page.
-    response = requests.get(f"https://genshin-impact.fandom.com/wiki/{query}")
-    soup = BeautifulSoup(response.content, "html.parser")
+    response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
+    soup = BeautifulSoup(response.content, "lxml")
     
     # Get HTML data from lore page.
-    response2 = requests.get(f"https://genshin-impact.fandom.com/wiki/{query}/Lore")
-    soup2 = BeautifulSoup(response2.content, "html.parser")
+    response2 = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}/Lore")
+    soup2 = BeautifulSoup(response2.content, "lxml")
     
     char_info_div = soup.find("aside", {"role": "region"})
     char_details_div = char_info_div.find("section", {"class": "wds-tabber"})

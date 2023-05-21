@@ -7,10 +7,14 @@ Last Modified: 2023-05-20
 
 import re
 import requests
+import lxml
+import cchardet
 from bs4 import BeautifulSoup
 
 from utils.settings import *
 from utils.helpers import *
+
+requests_session = requests.Session()
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -31,8 +35,8 @@ def get_all_weapon_names():
     names = []
     
     # Get HTML data from main page.
-    response = requests.get("https://genshin-impact.fandom.com/wiki/Weapon/List")
-    soup = BeautifulSoup(response.content, "html.parser")
+    response = requests_session.get("https://genshin-impact.fandom.com/wiki/Weapon/List")
+    soup = BeautifulSoup(response.content, "lxml")
     
     # Find playable characters list.
     weapons_div = soup.find("span", {"id": "List_of_All_Weapons"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
@@ -58,8 +62,8 @@ def scrape_weapons(query=""):
     query = query.replace('"', '').replace(' ', '_')
     
     # Get HTML data from main page.
-    response = requests.get(f"https://genshin-impact.fandom.com/wiki/{query}")
-    soup = BeautifulSoup(response.content, "html.parser")
+    response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
+    soup = BeautifulSoup(response.content, "lxml")
     
     weapon_info_div = soup.find("aside", {"role": "region"})
     stats_info_div = weapon_info_div.find("a", {"title": "Attribute"}).find_parent("h2").find_next_sibling("section").find("section")

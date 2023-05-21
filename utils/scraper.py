@@ -14,46 +14,46 @@ from utils.scrapers.weapons import scrape_weapons, get_all_weapon_names
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def get_all_names(mode=DEFAULT_MODE):
-    """Retrieves all names of items for the specified mode."""
-    match mode:
+def get_all_names(category=DEFAULT_CATEGORY):
+    """Retrieves all names of items for the specified category."""
+    match category:
         # Get all artifact names.
-        case Mode.ARTIFACTS.value:
+        case Category.ARTIFACTS.value:
             return get_all_artifact_names()
         # Get all character names.
-        case Mode.CHARACTERS.value:
+        case Category.CHARACTERS.value:
             return get_all_character_names()
         # Get all weapon names.
-        case Mode.WEAPONS.value:
+        case Category.WEAPONS.value:
             return get_all_weapon_names()
-        # Unknown mode.
+        # Unknown category.
         case _:
-            raise Exception(f"Unknown mode ({mode}) selected.")
+            raise Exception(f"Unknown category ({category}) selected.")
 
 
-def scrape(mode=DEFAULT_MODE, query=""):
+def scrape(category=DEFAULT_CATEGORY, query=""):
     """Scrapes HTML data of characters."""
     data = {}
-    match mode:
+    match category:
         # Scrape artifact data.
-        case Mode.ARTIFACTS.value:
+        case Category.ARTIFACTS.value:
             try:
                 data = scrape_artifacts(query)
             except:
                 raise Exception(f"Failed to scrape artifact '{query}'.")
         # Scrape character data.
-        case Mode.CHARACTERS.value:
+        case Category.CHARACTERS.value:
             try:
                 data = scrape_characters(query)
             except:
                 raise Exception(f"Failed to scrape character '{query}'.")
         # Scrape weapons data.
-        case Mode.WEAPONS.value:
+        case Category.WEAPONS.value:
             try:
                 data = scrape_weapons(query)
             except:
                 raise Exception(f"Failed to scrape weapon '{query}'.")
-        # Unknown mode.
+        # Unknown category.
         case _:
-            raise Exception(f"Unknown mode ({mode}) selected.")
+            raise Exception(f"Unknown category ({category}) selected.")
     return data

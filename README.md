@@ -10,21 +10,23 @@ This is a scraper for characters from the game "Genshin Impact". Data is scraped
 - [BeautifulSoup4](https://pypi.org/project/beautifulsoup4/)
 - [Requests](https://pypi.org/project/requests/)
 - [Colorama](https://pypi.org/project/colorama/) (for coloured terminal output)
+- [cChardet](https://pypi.org/project/cchardet/)
+- [lxml](https://pypi.org/project/lxml/)
 
 ## Usage
 ```bash
-$ python3 main.py create mode args[]
+$ python3 main.py create category args[]
 ```
 
 ```bash
-$ make create mode args[]
+$ make create category args[]
 ```
-The `mode` argument specifies the category of items. They can be one of the following:
+The `category` argument specifies the category of items. They can be one of the following:
 - `characters`
 - `weapons`
 - `artifacts`
 
-Adding `args[]` is optional. If no `args[]` are provided, the program will scrape all items of the mode. If `args[]` are provided, the program will scrape only the items specified by the `args[]`. The `args[]` are the names of the items, separated by spaces.
+Adding `args[]` is optional. If no `args[]` are provided, the program will scrape all items of the given category. If `args[]` are provided, the program will scrape only the items specified by the `args[]`. The `args[]` are the names of the items, separated by spaces.
 
 Example use for scraping the characters `"Amber"` and `"Lisa"`, run the following command:
 

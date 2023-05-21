@@ -12,8 +12,8 @@ class Functions(Enum):
     CLEAN = "clean"
     CREATE = "create"
 
-class Mode(Enum):
-    """Enum for mode."""
+class Category(Enum):
+    """Enum for category."""
     ARTIFACTS = "artifacts"
     CHARACTERS = "characters"
     WEAPONS = "weapons"
@@ -22,8 +22,8 @@ class Mode(Enum):
 #                                  MODIFIABLES                                 #
 # ---------------------------------------------------------------------------- #
 
-# Default data generation mode.
-DEFAULT_MODE = Mode.CHARACTERS.value
+# Default data generation category.
+DEFAULT_CATEGORY = Category.CHARACTERS.value
 
 # Files and directories.
 DATA_SAVE_DIR = "assets/data/"
