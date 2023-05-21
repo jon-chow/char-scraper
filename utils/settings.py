@@ -25,9 +25,6 @@ class Mode(Enum):
 # Default data generation mode.
 DEFAULT_MODE = Mode.CHARACTERS.value
 
-# URL for scraping.
-URL = "https://genshin-impact.fandom.com/wiki/"
-
 # Files and directories.
 DATA_SAVE_DIR = "assets/data/"
 IMG_SAVE_DIR = "assets/images/"

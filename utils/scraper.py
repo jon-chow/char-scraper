@@ -7,13 +7,9 @@ Last Modified: 2023-05-20
 
 from utils.settings import *
 
-from utils.scrapers.data.characters import scrape_characters
-from utils.scrapers.data.artifacts import scrape_artifacts
-from utils.scrapers.data.weapons import scrape_weapons
-
-from utils.scrapers.names.artifacts import get_all_artifact_names
-from utils.scrapers.names.characters import get_all_character_names
-from utils.scrapers.names.weapons import get_all_weapon_names
+from utils.scrapers.artifacts import scrape_artifacts, get_all_artifact_names
+from utils.scrapers.characters import scrape_characters, get_all_character_names
+from utils.scrapers.weapons import scrape_weapons, get_all_weapon_names
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -35,26 +31,26 @@ def get_all_names(mode=DEFAULT_MODE):
             raise Exception(f"Unknown mode ({mode}) selected.")
 
 
-def scrape(mode=DEFAULT_MODE, url=URL, query=""):
-    """Scrapes HTML data of characters from given URL."""
+def scrape(mode=DEFAULT_MODE, query=""):
+    """Scrapes HTML data of characters."""
     data = {}
     match mode:
         # Scrape artifact data.
         case Mode.ARTIFACTS.value:
             try:
-                data = scrape_artifacts(url, query)
+                data = scrape_artifacts(query)
             except:
                 raise Exception(f"Failed to scrape artifact '{query}'.")
         # Scrape character data.
         case Mode.CHARACTERS.value:
             try:
-                data = scrape_characters(url, query)
+                data = scrape_characters(query)
             except:
                 raise Exception(f"Failed to scrape character '{query}'.")
         # Scrape weapons data.
         case Mode.WEAPONS.value:
             try:
-                data = scrape_weapons(url, query)
+                data = scrape_weapons(query)
             except:
                 raise Exception(f"Failed to scrape weapon '{query}'.")
         # Unknown mode.

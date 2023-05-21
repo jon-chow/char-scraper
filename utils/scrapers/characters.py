@@ -15,15 +15,43 @@ from utils.helpers import *
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def scrape_characters(url=URL, query=""):
-    data = {}
+def get_all_character_names():
+    """Get all character names from the wiki."""
+    names = []
     
     # Get HTML data from main page.
-    response = requests.get(f"{URL}{query}")
+    response = requests.get("https://genshin-impact.fandom.com/wiki/Character/List")
+    soup = BeautifulSoup(response.content, "html.parser")
+    
+    # Find playable characters list.
+    playable_characters_div = soup.find("span", {"id": "Playable_Characters"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
+    
+    # Get names.
+    for tr in playable_characters_div.find_all("tr"):
+        try:
+            name = tr.find("td").find("a").get("title")
+            names.append(name)
+        except:
+            pass
+    
+    if names != []:
+        return names
+    else:
+        return False
+
+
+def scrape_characters(query=""):
+    """Scrape character data from the wiki."""
+    data = {}
+    
+    query = query.replace('-', ' ').replace("'", '').replace('"', '').replace(' ', '_').title()
+    
+    # Get HTML data from main page.
+    response = requests.get(f"https://genshin-impact.fandom.com/wiki/{query}")
     soup = BeautifulSoup(response.content, "html.parser")
     
     # Get HTML data from lore page.
-    response2 = requests.get(f"{URL}{query}/Lore")
+    response2 = requests.get(f"https://genshin-impact.fandom.com/wiki/{query}/Lore")
     soup2 = BeautifulSoup(response2.content, "html.parser")
     
     char_info_div = soup.find("aside", {"role": "region"})
