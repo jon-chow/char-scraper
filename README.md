@@ -30,27 +30,43 @@ Adding `args[]` is optional. If no `args[]` are provided, the program will scrap
 
 Example use for scraping the characters `"Amber"` and `"Lisa"`, run the following command:
 
-#### With Python:
+### With Python:
 ```bash
 $ python3 main.py create characters amber lisa
 ```
 
-#### With Make:
+### With Make:
 ```bash
 $ make create characters amber lisa
 ```
 
 For characters with multi-word names, wrap their name around quotations (Python) or use hyphens (Make). For example, to scrape `"Kaedehara Kazuha"` and `"Kamisato Ayaka"`, run the following command:
 
-#### With Python:
+### With Python:
 ```bash
 $ python3 main.py create characters "kaedehara kazuha" "kamisato ayaka"
 ```
+<img src="__demos__/python_create_single.gif" alt="" width="fit-content">
 
-#### With Make:
+### With Make:
 ```bash
 $ make create characters kaedehara-kazuha kamisato-ayaka
 ```
+<img src="__demos__/make_create_single.gif" alt="" width="fit-content">
+
+To clear the data of a category, change the `create` command to `clear`. For example, to clear the data of all characters, run the following command:
+
+### With Python:
+```bash
+$ python3 main.py clear characters
+```
+<img src="__demos__/python_create_multi.gif" alt="" width="fit-content">
+
+### With Make:
+```bash
+$ make clear characters
+```
+<img src="__demos__/make_create_multi.gif" alt="" width="fit-content">
 
 ## License
 Licensed under Open Software License v3.0
