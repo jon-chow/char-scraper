@@ -10,30 +10,25 @@ import os
 import colorama
 from colorama import Fore, Back, Style
 
-from utils.scraper import scrape
-
-from utils.scrapers.artifacts import get_all_artifact_names
-from utils.scrapers.characters import get_all_character_names
-from utils.scrapers.weapons import get_all_weapon_names
-
+from utils.scraper import scrape, get_all_names
 
 colorama.init(autoreset=True)
 
-TESTS_DIR = "tests"
+TESTS_DIR = "tests/data"
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def test_get_all_names(test_function, expected):
-  """Tests retrieving all names for a given test function."""
+def test_get_all_names(category, expected):
+  """Tests retrieving all names for a given category."""
   try:
-    actual = test_function()
+    actual = get_all_names(category)
     actual = actual[:1] + actual[-1:]
     assert (actual == expected)
-    print(f"{Fore.GREEN}Test {test_function.__name__}() passed!")
+    print(f"{Fore.GREEN}Test get_all_{category}_names() passed!")
     return True
   except Exception as e:
-    print(f"{Fore.RED}Test {test_function.__name__}() failed!")
+    print(f"{Fore.RED}Test get_all_{category}_names() failed!")
     return False
 
 
@@ -66,23 +61,25 @@ def test():
     """Increments the number of failed tests."""
     progress['fails'] += 1
   
-  print(f"{Fore.CYAN}\nTesting getting all names of items...")
   FUNCTIONS_TO_TEST = [
     {
-      "function": get_all_artifact_names,
+      "category": "artifacts",
       "expected": ["Adventurer", "Vourukasha's Glow"]
     },
     {
-      "function": get_all_character_names,
+      "category": "characters",
       "expected": ["Albedo", "Zhongli"]
     },
     {
-      "function": get_all_weapon_names,
+      "category": "weapons",
       "expected": ["A Thousand Floating Dreams", "Waster Greatsword"]
     },
   ]
+  
+  # Testing: get_all_names().
+  print(f"{Fore.CYAN}\nTesting getting all names for each category...")
   for test in FUNCTIONS_TO_TEST:
-    if test_get_all_names(test_function=test['function'], expected=test['expected']):
+    if test_get_all_names(category=test['category'], expected=test['expected']):
       passed()
     else:
       failed()
@@ -101,6 +98,7 @@ def test():
           failed()
   
   return progress
+
 
 if __name__ == "__main__":
   results = test()
