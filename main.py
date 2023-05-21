@@ -64,19 +64,35 @@ def clear(category=DEFAULT_CATEGORY, folders=[]):
                 os.rmdir(folder_dir)
                 print(f"{Fore.CYAN}Removed {folder_dir}")
 
+
+def list_category(category=""):
+    """Lists items for the given category."""
+    if category == "":
+        # List all categories.
+        print(f"{Fore.CYAN}List of {Fore.YELLOW}categories:")
+        for (category) in Category:
+            print(f"{Fore.CYAN}- {category.value}")
+    else:
+        # List all items for the given category.
+        data = get_all_names(category=category)
+        print(f"{Fore.CYAN}List of {Fore.YELLOW}{category} {Fore.CYAN}({data.__len__()}):")
+        for (item) in data:
+            print(f"{Fore.CYAN}- {item}")
+
+
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
 # ---------------------------------------------------------------------------- #
 def main():
     """Main function."""
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 1:
         function = sys.argv[1]
-        category = sys.argv[2]
         
         match function:
             # Clear function.
             case Functions.CLEAR.value:
                 if len(sys.argv) > 3:
+                    category = sys.argv[2]
                     folders = sys.argv[3:]
                     clear(category=category, folders=folders)
                 else:
@@ -86,10 +102,23 @@ def main():
             case Functions.CREATE.value:
                 try:
                     if len(sys.argv) > 3:
+                        category = sys.argv[2]
                         folders = sys.argv[3:]
                         create_json(category=category, folders=folders)
                     else:
                         create_json(category=category)
+                except Exception as e:
+                    # Unknown category.
+                    raise Exception(f"Invalid category '{category}' does not exist.")
+            
+            # List function.
+            case Functions.LIST.value:
+                try:
+                    if len(sys.argv) > 2:
+                        category = sys.argv[2]
+                        list_category(category=category)
+                    else:
+                        list_category()
                 except Exception as e:
                     # Unknown category.
                     raise Exception(f"Invalid category '{category}' does not exist.")

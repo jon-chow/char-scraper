@@ -7,6 +7,8 @@ clear:
 	python main.py clear $(filter-out $@,$(MAKECMDGOALS))
 create:
 	python main.py create $(filter-out $@,$(MAKECMDGOALS))
+list:
+	python main.py list $(filter-out $@,$(MAKECMDGOALS))
 
 %:
 	@:
