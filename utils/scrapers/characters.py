@@ -25,10 +25,10 @@ def get_all_character_names():
     
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Character/List")
-    soup = BeautifulSoup(response.content, "lxml")
+    mainSoup = BeautifulSoup(response.content, "lxml")
     
     # Find playable characters list.
-    playable_characters_div = soup.find("span", {"id": "Playable_Characters"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
+    playable_characters_div = mainSoup.find("span", {"id": "Playable_Characters"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
     
     # Get names.
     for tr in playable_characters_div.find_all("tr"):
@@ -68,17 +68,19 @@ def scrape_characters(query=""):
     query = query.replace('-', ' ').replace("'", '').replace('"', '').replace(' ', '_').title()
     
     # Get HTML data from main page.
-    response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
-    soup = BeautifulSoup(response.content, "lxml")
-    
+    mainRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
+    mainSoup = BeautifulSoup(mainRes.content, "lxml")
     # Get HTML data from lore page.
-    response2 = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}/Lore")
-    soup2 = BeautifulSoup(response2.content, "lxml")
+    loreRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}/Lore")
+    loreSoup = BeautifulSoup(loreRes.content, "lxml")
+    # Get HTML data from outfits page.
+    outfitsRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}/Outfits")
+    outfitsSoup = BeautifulSoup(outfitsRes.content, "lxml")
     
-    char_info_div = soup.find("aside", {"role": "region"})
+    char_info_div = mainSoup.find("aside", {"role": "region"})
     char_details_div = char_info_div.find("section", {"class": "wds-tabber"})
-    talent_div = soup.find("div", {"class": "talent-table-container"})
-    constellation_div = soup.find("span", {"id": "Constellation"}).find_parent("h3").find_next_sibling("table", {"class": ["wikitable", 'talent-table']})
+    talent_div = mainSoup.find("div", {"class": "talent-table-container"})
+    constellation_div = mainSoup.find("span", {"id": "Constellation"}).find_parent("h3").find_next_sibling("table", {"class": ["wikitable", 'talent-table']})
     
     # Get character data.
     data["name"] = char_info_div.find("h2", {"data-source": "name"}).text.strip()
@@ -107,7 +109,7 @@ def scrape_characters(query=""):
     data["rarity"] = get_int_from_string(char_info_div.find("td", {"data-source": "quality"}).find("img").get("alt"))
     data["constellation"] = char_details_div.find("div", {"data-source": "constellation"}).find("h3").find_next_sibling().text.strip().replace(" (Story Quest Chapter)", "")
     data["birthday"] = get_birthday_from_string(char_details_div.find("div", {"data-source": "birthday"}).find("h3").find_next_sibling().text.strip())
-    data["description"] = soup2.find_all("p", {"class": "pull-quote__text"})[1].text.strip().replace("\u2014", "-")
+    data["description"] = loreSoup.find_all("p", {"class": "pull-quote__text"})[1].text.strip().replace("\u2014", "-")
     
     # Get skill talents data.
     skill_talents = []
@@ -226,5 +228,45 @@ def scrape_characters(query=""):
     # Misc data.
     data["vision_key"] = data["vision"].upper()
     data["weapon_type"] = data["weapon"].upper()
+    
+    # Get outfits data.
+    outfits_div = outfitsSoup.find("span", {"id": "List_of_Character_Outfits"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
+    
+    outfits = []
+    for tr in outfits_div.find_all("tr")[1:]:
+        try:
+            name = tr.find_all("td")[1].find("a").text.strip()
+            rarity = get_int_from_string(tr.find_all("td")[2].find("img").get("title").strip())
+            outfit_type = tr.find_all("td")[3].find("a").text.strip()
+            
+            outfitRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{name.replace(' ', '_')}")
+            outfitSoup = BeautifulSoup(outfitRes.content, "lxml")
+            
+            outfit_desc_div = outfitSoup.find("aside", {"role": "region"})
+            outfit_desc = outfit_desc_div.find("div", {"data-source": "description"}).find("div").text.strip()
+            
+            if outfit_type == "Alternate":
+                price = 0
+            else:
+                if rarity == 5:
+                    price = 2480
+                elif rarity == 4:
+                    price = 1680
+            
+            outfit_image = f"outfit-{name.replace(' ', '-').lower()}"
+            
+            outfits.append({
+                "type": outfit_type,
+                "name": name,
+                "description": outfit_desc,
+                "rarity": rarity,
+                "price": price,
+                "image": outfit_image,
+            })
+        except:
+            pass
+        
+    if outfits:
+        data["outfits"] = outfits
     
     return data

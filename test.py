@@ -23,7 +23,7 @@ TESTS_DIR = "tests"
 # ---------------------------------------------------------------------------- #
 def test_get_all_character_names():
   """Tests retrieving all character names (checks for only the first and last characters)."""
-  expected = ["albedo", "zhongli"]
+  expected = ["Albedo", "Zhongli"]
   actual = get_all_character_names()
   actual = actual[:1] + actual[-1:]
   try:
