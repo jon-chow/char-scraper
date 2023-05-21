@@ -15,7 +15,7 @@ from utils.helpers import *
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def scrape_characters(mode=DEFAULT_MODE, url=URL, query=""):
+def scrape_characters(url=URL, query=""):
     data = {}
     
     # Get HTML data from main page.
@@ -44,23 +44,13 @@ def scrape_characters(mode=DEFAULT_MODE, url=URL, query=""):
     
     if query != "Aloy":
         nation_div = char_details_div.find("div", {"data-source": "region"}).find("h3").find_next_sibling()
-        if nation_div.find("ul"):
-            data["nation"] = nation_div.find_all("li")[0].text.strip()
-        elif nation_div.find("a"):
-            data["nation"] = nation_div.text.strip()
-        else:
-            data["nation"] = nation_div.text.strip()
+        data["nation"] = parse_for_first_item_string(nation_div)
         data["nation"] = data["nation"].replace(" (in-game)", "")
     else:
         data["nation"] = "Outlander"
     
     affiliations_div = char_details_div.find("div", {"data-source": "affiliation"}).find("h3").find_next_sibling()
-    if affiliations_div.find("ul"):
-        data["affiliation"] = affiliations_div.find_all("li")[0].text.strip()
-    elif affiliations_div.find("a"):
-        data["affiliation"] = affiliations_div.text.strip()
-    else:
-        data["affiliation"] = affiliations_div.text.strip()
+    data["affiliation"] = parse_for_first_item_string(affiliations_div)
     data["affiliation"] = data["affiliation"].replace(" (on profile)", "")
     
     data["specialDish"] = char_details_div.find("div", {"data-source": "dish"}).find("h3").find_next_sibling().text.strip()

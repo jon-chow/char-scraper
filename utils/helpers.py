@@ -47,3 +47,13 @@ def get_birthday_from_string(string):
     if len(day) == 1:
         day = f"0{day}"
     return f"0000-{month}-{day}"
+
+
+def parse_for_first_item_string(element):
+    """Parses an element to get the first string."""
+    if element.find("ul"):
+        return element.find_all("li")[0].text.strip()
+    elif element.find("a"):
+        return element.text.strip()
+    else:
+        return element.text.strip()

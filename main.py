@@ -12,19 +12,25 @@ import colorama
 from colorama import Fore, Back, Style
 
 from utils.settings import *
-from utils.scraper import scrape
+from utils.scraper import scrape, get_all_names
 
 colorama.init(autoreset=True)
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def create_json(mode=DEFAULT_MODE, folders=FOLDERS, lang=LANG):
+def create_json(mode=DEFAULT_MODE, folders=[], lang=LANG):
     """Generates JSON files for each folder."""
+    # Get all if none are specified.
+    if folders == []:
+        folders = get_all_names(mode=mode)
+    
+    # Create JSON files for each folder.
     for (folder) in folders:
-        folder_dir = f"{DATA_SAVE_DIR}{mode}/{folder.lower().replace(' ', '-')}"
+        folder_name = folder.lower().replace(' ', '-').replace("'", '').replace('"', '')
+        folder_dir = f"{DATA_SAVE_DIR}{mode}/{folder_name}"
         try:
-            data = scrape(mode=mode, query=folder.replace('-', ' ').title().replace(' ', '_'))
+            data = scrape(mode=mode, query=folder.replace('-', ' ').replace("'", '').replace('"', '').title().replace(' ', '_'))
             # Create directory if it doesn't exist.
             if not os.path.exists(folder_dir):
                 os.makedirs(folder_dir)
@@ -37,9 +43,9 @@ def create_json(mode=DEFAULT_MODE, folders=FOLDERS, lang=LANG):
             print(f"{Fore.RED}Error: {e}")
 
 
-def clean_up(folders=""):
+def clean_up(mode=DEFAULT_MODE, folders=""):
     """Removes specified folders and its files."""
-    folder_dir = f"{DATA_SAVE_DIR}characters"
+    folder_dir = f"{DATA_SAVE_DIR}{mode}"
     if folders == "":
         # Remove all files and directories in the data save directory.
         if os.path.exists(folder_dir):
@@ -63,41 +69,38 @@ def clean_up(folders=""):
 # ---------------------------------------------------------------------------- #
 def main():
     """Main function."""
-    if len(sys.argv) > 1:
-        mode = sys.argv[1]
+    if len(sys.argv) > 2:
+        function = sys.argv[1]
+        mode = sys.argv[2]
         
-        match mode:
-            # Artifacts mode.
-            case Mode.ARTIFACTS.value:
-                raise Exception(f"Mode not implemented yet.")
-            
-            # Characters mode.
-            case Mode.CHARACTERS.value:
+        match function:
+            # Clean function.
+            case Functions.CLEAN.value:
+                print(f"{Fore.CYAN}Cleaning up data directory...")
                 # Get folders from command line arguments if they exist.
-                if len(sys.argv) > 2:
-                    folders = sys.argv[2:]
-                    create_json(mode=mode, folders=folders)
+                if len(sys.argv) > 3:
+                    folders = sys.argv[3:]
+                    clean_up(mode=mode, folders=folders)
                 else:
-                    create_json(mode=mode)
+                    clean_up(mode=mode)
             
-            # Weapons mode.
-            case Mode.WEAPONS.value:
-                raise Exception(f"Mode not implemented yet.")
+            # Create function.
+            case Functions.CREATE.value:
+                try:
+                    if len(sys.argv) > 3:
+                        folders = sys.argv[3:]
+                        create_json(mode=mode, folders=folders)
+                    else:
+                        create_json(mode=mode)
+                except Exception as e:
+                    # Unknown mode.
+                    raise Exception(f"Invalid mode '{mode}' does not exist.")
             
-            # Clean mode.
-            case Mode.CLEAN.value:
-                # Get folders from command line arguments if they exist.
-                if len(sys.argv) > 2:
-                    folders = sys.argv[2:]
-                    clean_up(folders=folders)
-                else:
-                    clean_up()
-            
-            # Unknown mode.
+            # Unknown function.
             case _:
-                raise Exception(f"Invalid mode '{mode}' does not exist.")
+                raise Exception(f"Invalid function '{function}' does not exist.")
     else:
-        raise Exception(f"No arguments were passed.")
+        raise Exception(f"Missing arguments.")
 
 if __name__ == "__main__":
     try:

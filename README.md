@@ -13,32 +13,41 @@ This is a scraper for characters from the game "Genshin Impact". Data is scraped
 
 ## Usage
 ```bash
-$ python3 main.py args[]
+$ python3 main.py create mode args[]
 ```
-The arguments are optional. If no arguments are provided, the program will scrape all characters specified in the constant FOLDERS. If arguments are provided, the program will scrape only the characters specified by the arguments. The arguments are the names of the characters, separated by spaces.
 
-For example, to scrape only the characters `"Amber"` and `"Lisa"`, run the following command:
+```bash
+$ make create mode args[]
+```
+The `mode` argument specifies the category of items. They can be one of the following:
+- `characters`
+- `weapons`
+- `artifacts`
+
+Adding `args[]` is optional. If no `args[]` are provided, the program will scrape all items of the mode. If `args[]` are provided, the program will scrape only the items specified by the `args[]`. The `args[]` are the names of the items, separated by spaces.
+
+Example use for scraping the characters `"Amber"` and `"Lisa"`, run the following command:
 
 #### With Python:
 ```bash
-$ python3 main.py characters amber lisa
+$ python3 main.py create characters amber lisa
 ```
 
 #### With Make:
 ```bash
-$ make run characters amber lisa
+$ make create characters amber lisa
 ```
 
 For characters with multi-word names, wrap their name around quotations (Python) or use hyphens (Make). For example, to scrape `"Kaedehara Kazuha"` and `"Kamisato Ayaka"`, run the following command:
 
 #### With Python:
 ```bash
-$ python3 main.py characters "kaedehara kazuha" "kamisato ayaka"
+$ python3 main.py create characters "kaedehara kazuha" "kamisato ayaka"
 ```
 
 #### With Make:
 ```bash
-$ make run characters kaedehara-kazuha kamisato-ayaka
+$ make create characters kaedehara-kazuha kamisato-ayaka
 ```
 
 ## License

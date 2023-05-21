@@ -11,7 +11,9 @@ import colorama
 from colorama import Fore, Back, Style
 
 from utils.scraper import scrape
-from utils.scrapers.char_names import get_all_character_names
+
+from utils.scrapers.names.characters import get_all_character_names
+
 
 colorama.init(autoreset=True)
 
