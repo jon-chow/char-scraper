@@ -66,16 +66,16 @@ def scrape_artifacts(query=""):
         two_piece = artifact_info_div.find("div", {"data-source": "2pcBonus"})
         for br in two_piece.find_all("br"):
             br.replace_with("\n")
-        data["2-piece_bonus"] = two_piece.text.strip()
+        data["2-piece_bonus"] = two_piece.text.strip().replace("2-Piece Bonus\n", "")
         
         four_piece = artifact_info_div.find("div", {"data-source": "4pcBonus"})
         for br in four_piece.find_all("br"):
             br.replace_with("\n")
-        data["4-piece_bonus"] = four_piece.text.strip()
+        data["4-piece_bonus"] = four_piece.text.strip().replace("4-Piece Bonus\n", "")
     except:
         one_piece = artifact_info_div.find("div", {"data-source": "1pcBonus"})
         for br in one_piece.find_all("br"):
             br.replace_with("\n")
-        data["4-piece_bonus"] = one_piece.text.strip()
+        data["1-piece_bonus"] = one_piece.text.strip().replace("1-Piece Bonus\n", "")
     
     return data

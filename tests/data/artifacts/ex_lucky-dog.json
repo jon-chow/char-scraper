@@ -1,6 +1,6 @@
 {
   "name": "Lucky Dog",
   "max_rarity": "2",
-  "2-piece_bonus": "2-Piece Bonus\nDEF increased by 100.",
-  "4-piece_bonus": "4-Piece Bonus\nPicking up Mora restores 300 HP."
+  "2-piece_bonus": "DEF increased by 100.",
+  "4-piece_bonus": "Picking up Mora restores 300 HP."
 }
