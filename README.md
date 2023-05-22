@@ -4,6 +4,7 @@ This is a scraper for data on things from the game "Genshin Impact". Data is scr
 
 ## Prerequisites
 - [Python](https://www.python.org/downloads/) ^3.11.0
+- [Pipenv](https://pypi.org/project/pipenv/) (optional)
 - [Make](https://www.gnu.org/software/make/) (optional)
 
 ## Dependencies
@@ -15,16 +16,23 @@ This is a scraper for data on things from the game "Genshin Impact". Data is scr
 
 ## Usage
 ```bash
-$ python3 main.py create category args[]
+$ python3 main.py "function" "category" "args[]"
 ```
 
 ```bash
-$ make create category args[]
+$ pipenv run dev "function" "category" "args[]"
 ```
-The `category` argument specifies the category of items. They can be one of the following:
-- `characters`
-- `weapons`
-- `artifacts`
+
+```bash
+$ make "function" "category" "args[]"
+```
+
+> The `function` argument specifies which function to run:
+> - `create`: generates data
+> - `clear`: clears data in directories
+> - `list`: lists categories or their items
+> 
+> The `category` argument specifies the category of items.
 
 Adding `args[]` is optional. If no `args[]` are provided, the program will scrape all items of the given category. If `args[]` are provided, the program will scrape only the items specified by the `args[]`. The `args[]` are the names of the items, separated by spaces.
 
@@ -34,6 +42,10 @@ Example use for scraping the characters `"Amber"` and `"Lisa"`, run the followin
 $ python3 main.py create characters amber lisa
 ```
 <img src="__demos__/python_create_single.gif" alt="" width="fit-content">
+
+```bash
+$ pipenv run dev create characters amber lisa
+```
 
 ```bash
 $ make create characters amber lisa
@@ -48,6 +60,10 @@ $ python3 main.py create characters "kaedehara kazuha" "kamisato ayaka"
 <img src="__demos__/python_create_multi.gif" alt="" width="fit-content">
 
 ```bash
+$ pipenv run dev create characters "kaedehara kazuha" "kamisato ayaka"
+```
+
+```bash
 $ make create characters kaedehara-kazuha kamisato-ayaka
 ```
 <img src="__demos__/make_create_multi.gif" alt="" width="fit-content">
@@ -56,6 +72,10 @@ To clear the data of a category, change the `create` command to `clear`. For exa
 
 ```bash
 $ python3 main.py clear characters
+```
+
+```bash
+$ pipenv run dev clear characters
 ```
 
 ```bash

@@ -91,18 +91,22 @@ def main():
         match function:
             # Clear function.
             case Functions.CLEAR.value:
-                if len(sys.argv) > 3:
+                try:
                     category = sys.argv[2]
-                    folders = sys.argv[3:]
-                    clear(category=category, folders=folders)
-                else:
-                    clear(category=category)
+                    if len(sys.argv) > 3:
+                        folders = sys.argv[3:]
+                        clear(category=category, folders=folders)
+                    else:
+                        clear(category=category)
+                except Exception as e:
+                    # Unknown category.
+                    raise Exception(f"Invalid category '{category}' does not exist.")
             
             # Create function.
             case Functions.CREATE.value:
                 try:
+                    category = sys.argv[2]
                     if len(sys.argv) > 3:
-                        category = sys.argv[2]
                         folders = sys.argv[3:]
                         create_json(category=category, folders=folders)
                     else:

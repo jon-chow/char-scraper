@@ -1,5 +1,0 @@
-beautifulsoup4==4.12.2
-Requests==2.30.0
-colorama==0.4.6
-cchardet==2.1.7
-lxml==4.9.2
