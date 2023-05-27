@@ -4,16 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-beautifulsoup4 = "==4.12.2"
-requests = "==2.30.0"
-colorama = "==0.4.6"
-cchardet = "==2.1.7"
-lxml = "==4.9.2"
+beautifulsoup4 = "*"
+requests = "*"
+colorama = "*"
+cchardet = "*"
+lxml = "*"
+pytest = "*"
+pytest-xdist = "*"
 
 [dev-packages]
 
 [scripts]
-test = "python test.py"
+test = "py.test test.py -n auto"
 dev = "python main.py"
 
 [requires]
