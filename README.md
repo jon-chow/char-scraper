@@ -13,6 +13,8 @@ This is a scraper for data on things from the game "Genshin Impact". Data is scr
 - [Colorama](https://pypi.org/project/colorama/) (for coloured terminal output)
 - [cChardet](https://pypi.org/project/cchardet/)
 - [lxml](https://pypi.org/project/lxml/)
+- [Pytest](https://pypi.org/project/pytest/) (for testing)
+- [Pytest-xdist](https://pypi.org/project/pytest-xdist/) (for parallel testing)
 
 ## Usage
 ```bash

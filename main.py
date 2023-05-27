@@ -67,18 +67,23 @@ def clear(category=DEFAULT_CATEGORY, folders=[]):
 
 def list_category(category=""):
     """Lists items for the given category."""
+    items = []
     if category == "":
         # List all categories.
-        print(f"{Fore.CYAN}List of {Fore.YELLOW}categories:")
+        print(f"{Fore.CYAN}List of {Fore.YELLOW}Categories:")
         for (category) in Category:
-            print(f"{Fore.CYAN}- {category.value}")
+            items.append(f"{Fore.CYAN}  - {category.value.title()}")
     else:
         # List all items for the given category.
         data = get_all_names(category=category)
-        print(f"{Fore.CYAN}List of {Fore.YELLOW}{category} {Fore.CYAN}({data.__len__()}):")
+        print(f"{Fore.CYAN}List of {Fore.YELLOW}{category.title()} ({data.__len__()}):")
         for (item) in data:
-            print(f"{Fore.CYAN}- {item}")
-
+            items.append(f"{Fore.CYAN}  - {item}")
+    
+    # Sort items alphabetically.
+    items.sort(key=lambda x: x.lower())
+    for (item) in items:
+        print(item)
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
