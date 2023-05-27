@@ -11,6 +11,7 @@ import sys
 import colorama
 from colorama import Fore, Back, Style
 
+from utils.helpers import paginate_output
 from utils.settings import *
 from utils.scraper import scrape, get_all_names
 
@@ -71,19 +72,18 @@ def list_category(category=""):
     if category == "":
         # List all categories.
         print(f"{Fore.CYAN}List of {Fore.YELLOW}Categories:")
-        for (category) in Category:
-            items.append(f"{Fore.CYAN}  - {category.value.title()}")
+        for (item) in Category:
+            items.append(item.value.title())
+        items.sort(key=lambda x: x.lower())
     else:
         # List all items for the given category.
         data = get_all_names(category=category)
         print(f"{Fore.CYAN}List of {Fore.YELLOW}{category.title()} ({data.__len__()}):")
         for (item) in data:
-            items.append(f"{Fore.CYAN}  - {item}")
-    
-    # Sort items alphabetically.
-    items.sort(key=lambda x: x.lower())
-    for (item) in items:
-        print(item)
+            items.append(item)
+        items.sort(key=lambda x: x.lower())
+    # Paginate output.
+    paginate_output(items, 10)
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
