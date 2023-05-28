@@ -5,6 +5,7 @@ Created: 2023-05-20
 Last Modified: 2023-05-21
 """
 
+import json
 import re
 import requests
 import lxml
@@ -48,10 +49,161 @@ def get_all_character_names():
     else:
         return False
 
-# TODO: Implement
+
 def scrape_travelers(resonance="Anemo"):
     """Scrape traveler data from the wiki."""
     data = {}
+    
+    # Get HTML data from main page.
+    mainRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/Traveler_({resonance})")
+    mainSoup = BeautifulSoup(mainRes.content, "lxml")
+    
+    talent_div = mainSoup.find("table", {"class": ["wikitable", "talent-table"]})
+    constellation_div = mainSoup.find("span", {"id": "Constellation"}).find_parent("h2").find_next_sibling("table", {"class": ["wikitable", "talent-table"]})
+    
+    # Pre-populate with general data about the traveler.
+    data["name"] = "Traveler"
+    data["title"] = "Outlander"
+    data["vision"] = "None"
+    data["weapon"] = "Sword"
+    data["gender"] = ["Male (Aether)", "Female (Lumine)"]
+    data["nation"] = "-"
+    data["affiliation"] = "-"
+    data["specialDish"] = "-"
+    data["namecard"] = "-"
+    data["rarity"] = 5
+    data["constellation"] = "Viator/Viatrix"
+    data["birthday"] = "-"
+    data["description"] = "A traveler from another world who had their only kin taken away, forcing them to embark on a journey to find The Seven."
+    
+    # Get skill talents data.
+    skill_talents = []
+    if resonance != "Unaligned":
+        def get_skill_talent(title):
+            skill_div = talent_div.find("a", {"title": title}).find_parent("td").find_parent("tr")
+            skill_name = skill_div.find_all("td")[1].find("a").text.strip()
+            
+            upgrades=[]
+            upgrades_div = skill_div.find_next_sibling("tr").find("div", {"data-expandtext": "▼Attribute Scaling▼"}).find("table", {"class": "wikitable"}).find("tbody")
+            for tr in upgrades_div.find_all("tr")[1:]:
+                try:
+                    name = tr.find("th").text.strip()
+                    value = tr.find("td").text.strip()
+                    
+                    if "%" in name:
+                        name = name.replace("(%)", "").strip()
+                        value = convert_to_percentage_string(value)
+                    
+                    upgrades.append({
+                        "name": name,
+                        "value": value
+                    })
+                except:
+                    pass
+            
+            # Combine "Low Plunge DMG" and "High Plunge DMG" into "Low / High Plunge DMG".
+            for i in range(len(upgrades)):
+                if upgrades[i]["name"] == "Low Plunge DMG":
+                    upgrades[i]["name"] = "Low / High Plunge DMG"
+                    upgrades[i]["value"] = f"{upgrades[i]['value']} / {upgrades[i+1]['value']}"
+                    upgrades.pop(i+1)
+                    break
+            
+            skill_desc = skill_div.find_next_sibling("tr").find("td")
+            for br in skill_desc.find_all("br"):
+                br.replace_with("\n")
+            for div in skill_desc.find_all("div"):
+                div.decompose()
+            skill_desc = skill_desc.text.strip()
+            
+            skill_talents.append({
+                "name": skill_name,
+                "unlock": title,
+                "description": skill_desc,
+                "upgrades": upgrades,
+                "type": title.upper().replace(" ", "_")
+            })
+        
+        get_skill_talent(title="Normal Attack")
+        get_skill_talent(title="Elemental Skill")
+        get_skill_talent(title="Elemental Burst")
+        
+        data["skillTalents"] = skill_talents
+        
+        # Get passive talents data.
+        passive_talents = []
+        first_passive_talent_div = talent_div.find("a", {"title": "1st Ascension Passive"}).find_parent("td").find_parent("tr")
+        first_passive_name = first_passive_talent_div.find_all("td")[1].find("a").text.strip()
+        first_passive_desc = first_passive_talent_div.find_next_sibling("tr").find("td")
+        for br in first_passive_desc.find_all("br"):
+            br.replace_with("\n")
+        for div in first_passive_desc.find_all("div"):
+            div.decompose()
+        first_passive_desc = first_passive_desc.text.strip()
+        passive_talents.append({
+            "name": first_passive_name,
+            "unlock": f"Unlocked at Ascension {1}",
+            "description": first_passive_desc,
+            "level": 1
+        })
+        
+        fourth_passive_talent_div = talent_div.find("a", {"title": "4th Ascension Passive"}).find_parent("td").find_parent("tr")
+        fourth_passive_name = fourth_passive_talent_div.find_all("td")[1].find("a").text.strip()
+        fourth_passive_desc = fourth_passive_talent_div.find_next_sibling("tr").find("td")
+        for br in fourth_passive_desc.find_all("br"):
+            br.replace_with("\n")
+        for div in fourth_passive_desc.find_all("div"):
+            div.decompose()
+        fourth_passive_desc = fourth_passive_desc.text.strip()
+        
+        data["passiveTalents"] = passive_talents
+        
+        # Get constellations data.
+        constellations = []
+        def get_constellations(level):
+            constellations_div = constellation_div.find("tbody")
+            constellation_name = constellations_div.find_all("tr")[level * 2 - 1].find_all("td")[1].find("a").text.strip()
+            constellation_desc = constellations_div.find_all("tr")[level * 2].find("td")
+            for br in constellation_desc.find_all("br"):
+                br.replace_with("\n")
+            for div in constellation_desc.find_all("div"):
+                div.decompose()
+            constellation_desc = constellation_desc.text.strip()
+            
+            constellations.append({
+                "name": constellation_name,
+                "unlock": f"Constellation Lv. {level}",
+                "description": constellation_desc,
+                "level": level
+            })
+        
+        for i in range(1, 7):
+            get_constellations(i)
+        
+        data["constellations"] = constellations
+    else:
+        data["skillTalents"] = [{
+            "name": "Normal Attack",
+            "unlock": "Normal Attack",
+            "description": "Normal Attack: Perform up to 5 rapid strikes.\n\nCharged Attack: Consumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n\nPlunging Attack: Plunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+            "upgrades": [
+                { "name": "1-Hit DMG", "value": "44.5%" },
+                { "name": "2-Hit DMG", "value": "43.4%" },
+                { "name": "3-Hit DMG", "value": "53.0%" },
+                { "name": "4-Hit DMG", "value": "58.3%" },
+                { "name": "5-Hit DMG", "value": "70.8%" },
+                { "name": "Charged Attack DMG", "value": ["55.9% + 60.7% (Aether)", "55.9% + 72.2% (Lumine)"] },
+                { "name": "Charged Attack Stamina Cost", "value": "20" },
+                { "name": "Plunge DMG", "value": "63.9%" },
+                { "name": "Low / High Plunge DMG", "value": "127.8% / 159.7%" }
+            ]
+        }]
+        data["passiveTalents"] = []
+        data["constellations"] = []
+    
+    # Misc data.
+    data["vision_key"] = "NONE"
+    data["weapon_type"] = "SWORD"
 
     return data
 
@@ -61,8 +213,8 @@ def scrape_characters(query=""):
     data = {}
     
     # If the character is traveler, scrape for traveler data instead.
-    if "Traveler" in query:
-        resonance = query.split(" ")[1].replace("(", "").replace(")", "")
+    if "traveler" in query.lower():
+        resonance = query.split(" ")[1].replace("(", "").replace(")", "").title()
         return scrape_travelers(resonance)
     
     query = query.replace('-', ' ').replace("'", '').replace('"', '').replace(' ', '_').title()
