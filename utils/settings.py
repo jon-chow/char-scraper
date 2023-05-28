@@ -2,7 +2,7 @@
 
 Author: jon-chow
 Created: 2023-05-20
-Last Modified: 2023-05-20
+Last Modified: 2023-05-28
 """
 
 from enum import Enum
@@ -19,13 +19,13 @@ class Functions(Enum):
 class Category(Enum):
     """Enum for category."""
     ARTIFACTS = "artifacts"
-    BOSSES = "bosses"
+    # BOSSES = "bosses"
     CHARACTERS = "characters"
-    CONSUMABLES = "consumables"
-    DOMAINS = "domains"
+    # CONSUMABLES = "consumables"
+    # DOMAINS = "domains"
     ELEMENTS = "elements"
-    ENEMIES = "enemies"
-    MATERIALS = "materials"
+    # ENEMIES = "enemies"
+    # MATERIALS = "materials"
     NATIONS = "nations"
     WEAPONS = "weapons"
 

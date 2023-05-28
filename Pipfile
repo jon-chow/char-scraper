@@ -16,7 +16,7 @@ pynput = "*"
 [dev-packages]
 
 [scripts]
-test = "py.test test.py -n auto"
+test = "py.test test.py -vv -n auto"
 dev = "python main.py"
 
 [requires]

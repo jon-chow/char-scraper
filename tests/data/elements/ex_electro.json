@@ -1,0 +1,63 @@
+{
+  "name": "Electro",
+  "key": "ELECTRO",
+  "resonances": [
+    {
+      "name": "High Voltage",
+      "description": "Affected by Hydro for 40% less time. Superconduct, Overloaded, and Electro-Charged have a 100% chance to generate an Electro Elemental Particle (CD: 5s)."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Overloaded",
+      "elements": [
+        "Pyro"
+      ],
+      "description": "Causes an explosion that deals AoE Pyro DMG"
+    },
+    {
+      "name": "Electro-Charged",
+      "elements": [
+        "Hydro"
+      ],
+      "description": "Deals Electro DMG and high Poise Damage over time to all nearby targets with the Wet status."
+    },
+    {
+      "name": "Superconduct",
+      "elements": [
+        "Cryo"
+      ],
+      "description": "Deals AoE Cryo DMG and reduces the Physical RES of enemies caught in the AoE by 40%."
+    },
+    {
+      "name": "Swirl",
+      "elements": [
+        "Anemo"
+      ],
+      "description": "Deals AoE Electro DMG while spreading the Electro status to nearby enemies."
+    },
+    {
+      "name": "Crystallize",
+      "elements": [
+        "Geo"
+      ],
+      "description": "Creates an Electro shard. Picking it up creates an Electro shield around the character."
+    },
+    {
+      "name": "Quicken",
+      "elements": [
+        "Electro",
+        "Dendro"
+      ],
+      "description": "Applies a Quicken aura.\n Aggravate: Triggered when applying Electro to an entity with the Quicken aura. Adds Additive Base DMG Bonus to the attack that triggers this reaction.\n Spread: Triggered when applying Dendro to an entity with the Quicken aura. Adds Additive Base DMG Bonus to the attack that triggers this reaction."
+    },
+    {
+      "name": "Hyperbloom",
+      "elements": [
+        "Hydro",
+        "Dendro"
+      ],
+      "description": "Transforms a Dendro Core produced by the Bloom reaction into a homing Sprawling Shot that deals increased AoE Dendro DMG in a small radius."
+    }
+  ]
+}

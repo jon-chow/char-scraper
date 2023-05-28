@@ -9,6 +9,7 @@ from utils.settings import *
 
 from utils.scrapers.artifacts import scrape_artifacts, get_all_artifact_names
 from utils.scrapers.characters import scrape_characters, get_all_character_names
+from utils.scrapers.elements import scrape_elements, get_all_element_names
 from utils.scrapers.nations import scrape_nations, get_all_nation_names
 from utils.scrapers.weapons import scrape_weapons, get_all_weapon_names
 

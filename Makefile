@@ -2,7 +2,7 @@ install:
 	pip install -r requirements.txt
 
 test:
-	py.test test.py -n auto
+	py.test test.py -vv -n auto
 clear:
 	python main.py clear $(filter-out $@,$(MAKECMDGOALS))
 create:
