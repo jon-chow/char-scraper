@@ -59,7 +59,7 @@ def scrape_weapons(query=""):
     """Scrape weapon data from the wiki."""
     data = {}
     
-    query = query.replace('"', '').replace(' ', '_')
+    query = title_case(query).replace('"', '').replace(' ', '_')
     
     # Get HTML data from main page.
     response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")

@@ -49,7 +49,7 @@ def scrape_artifacts(query=""):
     """Scrape artifact data from the wiki."""
     data = {}
     
-    query = query.replace('"', '').replace(' ', '_')
+    query = title_case(query).replace('"', '').replace(' ', '_')
     
     # Get HTML data from main page.
     response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")

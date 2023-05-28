@@ -11,6 +11,7 @@ cchardet = "*"
 lxml = "*"
 pytest = "*"
 pytest-xdist = "*"
+pynput = "*"
 
 [dev-packages]
 

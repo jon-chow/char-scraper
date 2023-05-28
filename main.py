@@ -58,6 +58,7 @@ def clear(category=DEFAULT_CATEGORY, folders=[]):
     else:
         # Remove specified files and directory if they exist.
         for (folder) in folders:
+            folder = folder.replace(' ', '-').replace("'", '').replace('"', '').replace('(', '').replace(')', '').lower()
             folder_dir = f"{DATA_SAVE_DIR}{category}/{folder}"
             if os.path.exists(folder_dir):
                 for file in os.listdir(folder_dir):
@@ -90,6 +91,7 @@ def list_category(category=""):
 # ---------------------------------------------------------------------------- #
 def main():
     """Main function."""
+    
     if len(sys.argv) > 1:
         function = sys.argv[1]
         

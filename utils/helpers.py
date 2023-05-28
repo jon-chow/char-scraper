@@ -21,6 +21,25 @@ def get_int_from_string(string):
     return int("".join(filter(str.isdigit, string)))
 
 
+def title_case(string):
+    """
+    Converts string to title case, ignoring prepositions.
+    Capitalizes hyphenated words i.e. "freedom-sworn" -> "Freedom-Sworn".
+    Capitalizes words in parentheses i.e. "prized isshin blade (awakened)" -> "Prized Isshin Blade (Awakened)".
+    Ignores capitalization of prepositions.
+    """
+    prepositions = ["a", "an", "the", "at", "by", "for", "in", "of", "on", "to", "up", "and", "as", "but", "it", "or", "nor"]
+    words = string.split(" ")
+    for i in range(len(words)):
+        if "-" in words[i]:
+            words[i] = "-".join([word.capitalize() for word in words[i].split("-")])
+        elif "(" in words[i]:
+            words[i] = "(".join([word.capitalize() for word in words[i].split("(")])
+        elif words[i] not in prepositions:
+            words[i] = words[i].capitalize()
+    return " ".join(words)
+
+
 def convert_month_to_num(month):
     """Converts month to number."""
     return {
@@ -79,12 +98,13 @@ def paginate_output(lines, max_items):
         start = (current_page - 1) * max_items
         end = start + max_items
         page_lines = lines[start:end]
+        LEADING_ZEROS = math.floor(math.log10(total_lines)) + 1
         
         # Clear and print page.
         print("\033c", end="")
         print(f"{Fore.YELLOW}Page {current_page} / {total_pages} ({total_lines} total items)")
         for line in page_lines:
-            print(f"{Fore.CYAN}{lines.index(line) + 1}. {line}")
+            print(f"{Fore.CYAN}{str(lines.index(line) + 1).zfill(LEADING_ZEROS)}. {line}")
             
         # Add padding if there are less than max_items.
         if len(page_lines) < max_items:
