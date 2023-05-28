@@ -2,7 +2,7 @@
 
 Author: jon-chow
 Created: 2023-05-20
-Last Modified: 2023-05-20
+Last Modified: 2023-05-28
 """
 
 import re
@@ -27,7 +27,7 @@ def get_all_artifact_names():
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Artifact/Sets")
     soup = BeautifulSoup(response.content, "lxml")
     
-    # Find playable characters list.
+    # Find artifacts list.
     artifacts_div = soup.find("span", {"id": "List_of_Artifact_Sets"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
     
     # Get names.

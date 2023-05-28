@@ -1,0 +1,15 @@
+{
+  "name": "Inazuma",
+  "element": "Electro",
+  "archon": {
+    "name": "Beelzebul",
+    "vessel": "Raiden Shogun"
+  },
+  "ideal": "Eternity",
+  "mainCity": "Inazuma City",
+  "controllingEntity": "Inazuma Shogunate",
+  "celebratedFestivals": [
+    "Irodori Festival",
+    "Mikawa Flower Festival"
+  ]
+}

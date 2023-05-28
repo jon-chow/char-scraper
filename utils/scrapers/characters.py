@@ -2,7 +2,7 @@
 
 Author: jon-chow
 Created: 2023-05-20
-Last Modified: 2023-05-21
+Last Modified: 2023-05-28
 """
 
 import json
@@ -217,7 +217,7 @@ def scrape_characters(query=""):
         resonance = query.split(" ")[1].replace("(", "").replace(")", "").title()
         return scrape_travelers(resonance)
     
-    query = query.replace('-', ' ').replace("'", '').replace('"', '').replace(' ', '_').title()
+    query = title_case(query).replace('"', '').replace(' ', '_')
     
     # Get HTML data from main page.
     mainRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
@@ -232,7 +232,7 @@ def scrape_characters(query=""):
     char_info_div = mainSoup.find("aside", {"role": "region"})
     char_details_div = char_info_div.find("section", {"class": "wds-tabber"})
     talent_div = mainSoup.find("div", {"class": "talent-table-container"})
-    constellation_div = mainSoup.find("span", {"id": "Constellation"}).find_parent("h3").find_next_sibling("table", {"class": ["wikitable", 'talent-table']})
+    constellation_div = mainSoup.find("table", {"class": "constellation-table"})
     
     # Get character data.
     data["name"] = char_info_div.find("h2", {"data-source": "name"}).text.strip()

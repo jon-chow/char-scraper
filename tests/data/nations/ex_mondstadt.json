@@ -1,0 +1,16 @@
+{
+  "name": "Mondstadt",
+  "element": "Anemo",
+  "archon": {
+    "name": "Barbatos",
+    "vessel": "Venti"
+  },
+  "ideal": "Freedom",
+  "mainCity": "City of Mondstadt",
+  "controllingEntity": "Knights of Favonius",
+  "celebratedFestivals": [
+    "Windblume Festival",
+    "Ludi Harpastum",
+    "Weinlesefest"
+  ]
+}

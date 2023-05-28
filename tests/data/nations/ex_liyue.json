@@ -1,0 +1,15 @@
+{
+  "name": "Liyue",
+  "element": "Geo",
+  "archon": {
+    "name": "Morax",
+    "vessel": "Zhongli"
+  },
+  "ideal": "Contracts",
+  "mainCity": "Liyue Harbor",
+  "controllingEntity": "Liyue Qixing",
+  "celebratedFestivals": [
+    "Lantern Rite Festival",
+    "Moonchase Festival"
+  ]
+}
