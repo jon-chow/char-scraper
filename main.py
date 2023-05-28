@@ -44,10 +44,22 @@ def create_json(category=DEFAULT_CATEGORY, folders=[], lang=LANG):
             print(f"{Fore.RED}Error: {e}")
 
 
-def clear(category=DEFAULT_CATEGORY, folders=[]):
+def clear(category="", folders=[]):
     """Removes specified folders and its files."""
-    if folders == []:
-        # Remove all files and directories in the data save directory.
+    # Remove all files and directories in all categories.
+    if category == "":
+        for (category) in Category:
+            category = category.value
+            folder_dir = f"{DATA_SAVE_DIR}{category}"
+            if os.path.exists(folder_dir):
+                for file in os.listdir(folder_dir):
+                    for subfile in os.listdir(f"{folder_dir}/{file}"):
+                        os.remove(f"{folder_dir}/{file}/{subfile}")
+                    os.rmdir(f"{folder_dir}/{file}")
+                    print(f"{Fore.CYAN}Removed {folder_dir}/{file}")
+                    
+    # Remove all files and directories in the specified category.
+    elif folders == []:
         folder_dir = f"{DATA_SAVE_DIR}{category}"
         if os.path.exists(folder_dir):
             for file in os.listdir(folder_dir):
@@ -55,8 +67,9 @@ def clear(category=DEFAULT_CATEGORY, folders=[]):
                     os.remove(f"{folder_dir}/{file}/{subfile}")
                 os.rmdir(f"{folder_dir}/{file}")
                 print(f"{Fore.CYAN}Removed {folder_dir}/{file}")
+                
+    # Remove specified files and directory in the specified category.
     else:
-        # Remove specified files and directory if they exist.
         for (folder) in folders:
             folder = folder.replace(' ', '-').replace("'", '').replace('"', '').replace('(', '').replace(')', '').lower()
             folder_dir = f"{DATA_SAVE_DIR}{category}/{folder}"
@@ -70,19 +83,21 @@ def clear(category=DEFAULT_CATEGORY, folders=[]):
 def list_category(category=""):
     """Lists items for the given category."""
     items = []
+    # List all categories.
     if category == "":
-        # List all categories.
         print(f"{Fore.CYAN}List of {Fore.YELLOW}Categories:")
         for (item) in Category:
             items.append(item.value.title())
         items.sort(key=lambda x: x.lower())
+    
+    # List all items for the given category.
     else:
-        # List all items for the given category.
         data = get_all_names(category=category)
         print(f"{Fore.CYAN}List of {Fore.YELLOW}{category.title()} ({data.__len__()}):")
         for (item) in data:
             items.append(item)
         items.sort(key=lambda x: x.lower())
+    
     # Paginate output.
     paginate_output(items, 10)
 
@@ -99,14 +114,16 @@ def main():
             # Clear function.
             case Functions.CLEAR.value:
                 try:
-                    category = sys.argv[2]
-                    if len(sys.argv) > 3:
-                        folders = sys.argv[3:]
-                        clear(category=category, folders=folders)
+                    if len(sys.argv) > 2:
+                        category = sys.argv[2]
+                        if len(sys.argv) > 3:
+                            folders = sys.argv[3:]
+                            clear(category=category, folders=folders)
+                        else:
+                            clear(category=category)
                     else:
-                        clear(category=category)
+                        clear()
                 except Exception as e:
-                    # Unknown category.
                     raise Exception(f"Invalid category '{category}' does not exist.")
             
             # Create function.
@@ -119,7 +136,6 @@ def main():
                     else:
                         create_json(category=category)
                 except Exception as e:
-                    # Unknown category.
                     raise Exception(f"Invalid category '{category}' does not exist.")
             
             # List function.
@@ -131,7 +147,6 @@ def main():
                     else:
                         list_category()
                 except Exception as e:
-                    # Unknown category.
                     raise Exception(f"Invalid category '{category}' does not exist.")
             
             # Unknown function.
@@ -139,6 +154,7 @@ def main():
                 raise Exception(f"Invalid function '{function}' does not exist.")
     else:
         raise Exception(f"Missing arguments.")
+
 
 if __name__ == "__main__":
     try:
