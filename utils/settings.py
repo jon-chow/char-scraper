@@ -19,7 +19,7 @@ class Functions(Enum):
 class Category(Enum):
     """Enum for category."""
     ARTIFACTS = "artifacts"
-    # BOSSES = "bosses"
+    BOSSES = "bosses"
     CHARACTERS = "characters"
     # CONSUMABLES = "consumables"
     # DOMAINS = "domains"

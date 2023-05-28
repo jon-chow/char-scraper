@@ -7,11 +7,12 @@ Last Modified: 2023-05-28
 
 from utils.settings import *
 
-from utils.scrapers.artifacts import scrape_artifacts, get_all_artifact_names
-from utils.scrapers.characters import scrape_characters, get_all_character_names
-from utils.scrapers.elements import scrape_elements, get_all_element_names
-from utils.scrapers.nations import scrape_nations, get_all_nation_names
-from utils.scrapers.weapons import scrape_weapons, get_all_weapon_names
+from utils.scrapers.artifacts import scrape_artifacts, get_all_artifacts_names
+from utils.scrapers.bosses import scrape_bosses, get_all_bosses_names
+from utils.scrapers.characters import scrape_characters, get_all_characters_names
+from utils.scrapers.elements import scrape_elements, get_all_elements_names
+from utils.scrapers.nations import scrape_nations, get_all_nations_names
+from utils.scrapers.weapons import scrape_weapons, get_all_weapons_names
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -26,9 +27,9 @@ def get_all_names(category=DEFAULT_CATEGORY):
         if case.value == category:
             is_unknown = False
             try:
-                data = globals()[f"get_all_{category[:-1]}_names"]()
+                data = globals()[f"get_all_{category}_names"]()
             except:
-                raise Exception(f"Failed to get names of {category[:-1]}.")
+                raise Exception(f"Failed to get names of {category}.")
     
     # Check if unknown category was selected.
     if is_unknown:
@@ -36,7 +37,7 @@ def get_all_names(category=DEFAULT_CATEGORY):
     
     # Check if data was scraped successfully.
     if data == {}:
-        raise Exception(f"Failed to scrape {category[:-1]} '{query}'.")
+        raise Exception(f"Failed to scrape {category} '{query}'.")
     else:
         return data
 
@@ -53,7 +54,7 @@ def scrape(category=DEFAULT_CATEGORY, query=""):
             try:
                 data = globals()[f"scrape_{case.value}"](query=query)
             except:
-                raise Exception(f"Failed to scrape {category[:-1]} '{query}'.")
+                raise Exception(f"Failed to scrape {category} '{query}'.")
     
     # Check if unknown category was selected.
     if is_unknown:
@@ -61,6 +62,6 @@ def scrape(category=DEFAULT_CATEGORY, query=""):
     
     # Check if data was scraped successfully.
     if data == {}:
-        raise Exception(f"Failed to scrape {category[:-1]} '{query}'.")
+        raise Exception(f"Failed to scrape {category} '{query}'.")
     else:
         return data

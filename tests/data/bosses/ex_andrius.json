@@ -1,0 +1,38 @@
+{
+  "name": "Andrius",
+  "title": "Dominator of Wolves",
+  "description": "Rumor has it that a great eternal power rests at Wolvendom, watching over the wolves...",
+  "drops": [
+    "Agnidus Agate Chunk",
+    "Agnidus Agate Fragment",
+    "Agnidus Agate Gemstone",
+    "Agnidus Agate Sliver",
+    "Berserker",
+    "Dream Solvent",
+    "Gladiator's Finale",
+    "Instructor",
+    "Northlander Bow Billet",
+    "Northlander Catalyst Billet",
+    "Northlander Claymore Billet",
+    "Northlander Polearm Billet",
+    "Northlander Sword Billet",
+    "Prithiva Topaz Chunk",
+    "Prithiva Topaz Fragment",
+    "Prithiva Topaz Gemstone",
+    "Prithiva Topaz Sliver",
+    "Ring of Boreas",
+    "Shivada Jade Chunk",
+    "Shivada Jade Fragment",
+    "Shivada Jade Gemstone",
+    "Shivada Jade Sliver",
+    "Spirit Locket of Boreas",
+    "Tail of Boreas",
+    "The Exile",
+    "Wanderer's Troupe"
+  ],
+  "challenge": "Wolf of the North Challenge",
+  "elements": [
+    "Anemo",
+    "Cryo"
+  ]
+}

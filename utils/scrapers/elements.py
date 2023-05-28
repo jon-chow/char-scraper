@@ -19,7 +19,7 @@ requests_session = requests.Session()
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def get_all_element_names():
+def get_all_elements_names():
     """Get all element names from the wiki."""
     names = []
     
@@ -58,7 +58,7 @@ def scrape_elements(query=""):
     resonances_div = soup.find("span", {"id": "Elemental_Resonance"}).find_parent("h2").find_next_sibling("p").find_next_sibling("ul")
     reactions_div = soup.find("span", {"id": "Elemental_Reactions"}).find_parent("h2").find_next_sibling("p").find_next_sibling("ul")
     
-    # Get nation data.
+    # Get elements data.
     try:
         data["name"] = element_info_div.find("h2", {"data-source": "name"}).text.strip()
         data["key"] = data["name"].upper()
@@ -81,7 +81,7 @@ def scrape_elements(query=""):
         # Get reactions.
         data["reactions"] = []
         for li in reactions_div.find_all("li"):
-            res = {}
+            reaction = {}
             
             # Skip sublists.
             if li.find_parent("ul") != reactions_div:
@@ -92,21 +92,22 @@ def scrape_elements(query=""):
                     br.replace_with("\n")
                 for div in li.find_all("div"):
                     div.decompose()
-                res["name"] = li.find("b").text.replace(":", "").strip()
+                reaction["name"] = li.find("b").text.replace(":", "").strip()
                 
                 try:
-                    res["elements"] = []
-                    if (query == "Anemo" and res["name"] == "Swirl") or (query == "Geo" and res["name"] == "Crystallize"):
-                        res["elements"] = ["Pyro", "Hydro", "Electro", "Cryo"]
+                    reaction["elements"] = []
+                    if (query == "Anemo" and reaction["name"] == "Swirl") or (query == "Geo" and reaction["name"] == "Crystallize"):
+                        reaction["elements"] = ["Pyro", "Hydro", "Electro", "Cryo"]
                     else:
                         for img in li.find_all("img"):
-                            res["elements"].append(img.get("alt"))
-                        res["elements"] = list(set(res["elements"]))
+                            reaction["elements"].append(img.get("alt"))
+                        reaction["elements"] = list(set(reaction["elements"]))
+                        reaction["elements"].sort()
                 except:
                     pass
                 
-                res["description"] = li.text.replace(res["name"] + ": ", "").strip()
-                data["reactions"].append(res)
+                reaction["description"] = li.text.replace(reaction["name"] + ": ", "").strip()
+                data["reactions"].append(reaction)
             except:
                 pass
         

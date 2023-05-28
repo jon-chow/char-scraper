@@ -20,7 +20,7 @@ requests_session = requests.Session()
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def get_all_character_names():
+def get_all_characters_names():
     """Get all character names from the wiki."""
     names = []
     

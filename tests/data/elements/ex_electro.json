@@ -46,16 +46,16 @@
     {
       "name": "Quicken",
       "elements": [
-        "Electro",
-        "Dendro"
+        "Dendro",
+        "Electro"
       ],
       "description": "Applies a Quicken aura.\n Aggravate: Triggered when applying Electro to an entity with the Quicken aura. Adds Additive Base DMG Bonus to the attack that triggers this reaction.\n Spread: Triggered when applying Dendro to an entity with the Quicken aura. Adds Additive Base DMG Bonus to the attack that triggers this reaction."
     },
     {
       "name": "Hyperbloom",
       "elements": [
-        "Hydro",
-        "Dendro"
+        "Dendro",
+        "Hydro"
       ],
       "description": "Transforms a Dendro Core produced by the Bloom reaction into a homing Sprawling Shot that deals increased AoE Dendro DMG in a small radius."
     }

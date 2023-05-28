@@ -19,7 +19,7 @@ requests_session = requests.Session()
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def get_all_nation_names():
+def get_all_nations_names():
     """Get all nation names from the wiki."""
     names = []
     

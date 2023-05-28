@@ -19,7 +19,7 @@ requests_session = requests.Session()
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
 # ---------------------------------------------------------------------------- #
-def get_all_artifact_names():
+def get_all_artifacts_names():
     """Get all artifact names from the wiki."""
     names = []
     

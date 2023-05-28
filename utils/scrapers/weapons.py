@@ -30,7 +30,7 @@ def rename_location(string):
     }.get(string, string)
 
 
-def get_all_weapon_names():
+def get_all_weapons_names():
     """Get all weapon names from the wiki."""
     names = []
     
