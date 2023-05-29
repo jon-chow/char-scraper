@@ -8,8 +8,10 @@ Last Modified: 2023-05-28
 import json
 import os
 import sys
+import time
 import colorama
 from colorama import Fore, Back, Style
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils.helpers import paginate_output
 from utils.settings import *
@@ -22,12 +24,14 @@ colorama.init(autoreset=True)
 # ---------------------------------------------------------------------------- #
 def create_json(category=DEFAULT_CATEGORY, folders=[], lang=LANG):
     """Generates JSON files for each folder."""
+    start_time = time.time()
+    
     # Get all if none are specified.
     if folders == []:
         folders = get_all_names(category=category)
     
-    # Create JSON files for each folder.
-    for (folder) in folders:
+    def create_folder(folder):
+        """Creates a folder for each folder name."""
         folder_name = folder.replace(' ', '-').replace("'", '').replace('"', '').replace('(', '').replace(')', '').lower()
         folder_dir = f"{DATA_SAVE_DIR}{category}/{folder_name}"
         try:
@@ -38,35 +42,41 @@ def create_json(category=DEFAULT_CATEGORY, folders=[], lang=LANG):
             # Create JSON file.
             with open(f"{folder_dir}/{lang}.json", "w") as f:
                 json.dump(data, f, indent=2)
-                print(f"{Fore.CYAN}Created {folder_dir}/{lang}.json")
+                return (f"{Fore.CYAN}Created /{folder_dir}/{lang}.json")
         except Exception as e:
             # Failed to create JSON file.
-            print(f"{Fore.RED}Error: {e}")
+            return (f"{Fore.RED}Error: {e}")
+    
+    # Create a folder for each folder name.
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(create_folder, folder) for folder in folders]
+        for future in as_completed(futures):
+            print(f"{future.result()} in{Fore.YELLOW}{time.time() - start_time: .2f} seconds.")
 
 
 def clear(category="", folders=[]):
     """Removes specified folders and its files."""
     # Remove all files and directories in all categories.
     if category == "":
-        for (category) in Category:
-            category = category.value
-            folder_dir = f"{DATA_SAVE_DIR}{category}"
-            if os.path.exists(folder_dir):
-                for file in os.listdir(folder_dir):
-                    for subfile in os.listdir(f"{folder_dir}/{file}"):
-                        os.remove(f"{folder_dir}/{file}/{subfile}")
-                    os.rmdir(f"{folder_dir}/{file}")
-                    print(f"{Fore.CYAN}Removed {folder_dir}/{file}")
+        for root, dirs, files in os.walk(DATA_SAVE_DIR, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+            for name in dirs:
+                dir_dir = os.path.join(root, name).replace('\\', '/')
+                os.rmdir(dir_dir)
+                print(f"{Fore.CYAN}Removed /{dir_dir}")
                     
     # Remove all files and directories in the specified category.
     elif folders == []:
         folder_dir = f"{DATA_SAVE_DIR}{category}"
         if os.path.exists(folder_dir):
-            for file in os.listdir(folder_dir):
-                for subfile in os.listdir(f"{folder_dir}/{file}"):
-                    os.remove(f"{folder_dir}/{file}/{subfile}")
-                os.rmdir(f"{folder_dir}/{file}")
-                print(f"{Fore.CYAN}Removed {folder_dir}/{file}")
+            for root, dirs, files in os.walk(folder_dir, topdown=False):
+                for name in files:
+                    os.remove(os.path.join(root, name))
+                for name in dirs:
+                    dir_dir = os.path.join(root, name).replace('\\', '/')
+                    os.rmdir(dir_dir)
+                    print(f"{Fore.CYAN}Removed /{dir_dir}")
                 
     # Remove specified files and directory in the specified category.
     else:
@@ -101,12 +111,12 @@ def list_category(category=""):
     # Paginate output.
     paginate_output(items, 10)
 
+
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
 # ---------------------------------------------------------------------------- #
 def main():
     """Main function."""
-    
     if len(sys.argv) > 1:
         function = sys.argv[1]
         
