@@ -58,8 +58,8 @@ def scrape_travelers(resonance="Anemo"):
     mainRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/Traveler_({resonance})")
     mainSoup = BeautifulSoup(mainRes.content, "lxml")
     
-    talent_div = mainSoup.find("table", {"class": ["wikitable", "talent-table"]})
-    constellation_div = mainSoup.find("span", {"id": "Constellation"}).find_parent("h2").find_next_sibling("table", {"class": ["wikitable", "talent-table"]})
+    talent_div = mainSoup.find("table", {"class": "talent-table"})
+    constellation_div = mainSoup.find("table", {"class": "constellation-table"})
     
     # Pre-populate with general data about the traveler.
     data["name"] = "Traveler"
