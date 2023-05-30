@@ -11,7 +11,7 @@ import os
 import colorama
 from colorama import Fore, Back, Style
 
-from utils.scraper import scrape, get_all_names
+from utils.scrapers import scrape, get_all_names
 
 colorama.init(autoreset=True)
 

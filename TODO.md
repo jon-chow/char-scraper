@@ -1,11 +1,8 @@
 ### **Implement data scraping for the following categories:**
-- [ ] Bosses
 - [ ] Consumables
 - [ ] Domains
-- [ ] Elements
 - [ ] Enemies
 - [ ] Materials
-- [ ] Nations
 
 ### **Implement data generation for different languages:**
 - [ ] Chinese
@@ -13,3 +10,6 @@
 - [ ] French
 - [ ] Japanese
 - [ ] Russian
+
+### **Implement the ability to generate only the missing folders:**
+- This will be useful for when new content is added to the game.

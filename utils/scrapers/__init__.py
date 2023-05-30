@@ -7,12 +7,12 @@ Last Modified: 2023-05-28
 
 from utils.settings import *
 
-from utils.scrapers.artifacts import scrape_artifacts, get_all_artifacts_names
-from utils.scrapers.bosses import scrape_bosses, get_all_bosses_names
-from utils.scrapers.characters import scrape_characters, get_all_characters_names
-from utils.scrapers.elements import scrape_elements, get_all_elements_names
-from utils.scrapers.nations import scrape_nations, get_all_nations_names
-from utils.scrapers.weapons import scrape_weapons, get_all_weapons_names
+from .artifacts import *
+from .bosses import *
+from .characters import *
+from .elements import *
+from .nations import *
+from .weapons import *
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #

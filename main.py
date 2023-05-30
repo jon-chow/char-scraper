@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils.helpers import paginate_output
 from utils.settings import *
-from utils.scraper import scrape, get_all_names
+from utils.scrapers import scrape, get_all_names
 
 colorama.init(autoreset=True)
 
@@ -42,7 +42,7 @@ def create_json(category=DEFAULT_CATEGORY, folders=[], lang=LANG):
             # Create JSON file.
             with open(f"{folder_dir}/{lang}.json", "w") as f:
                 json.dump(data, f, indent=2)
-                return (f"{Fore.CYAN}Created /{folder_dir}/{lang}.json")
+                return (f"{Fore.CYAN}Created {folder_dir}/{lang}.json")
         except Exception as e:
             # Failed to create JSON file.
             return (f"{Fore.RED}Error: {e}")
@@ -64,7 +64,7 @@ def clear(category="", folders=[]):
             for name in dirs:
                 dir_dir = os.path.join(root, name).replace('\\', '/')
                 os.rmdir(dir_dir)
-                print(f"{Fore.CYAN}Removed /{dir_dir}")
+                print(f"{Fore.CYAN}Removed {dir_dir}")
                     
     # Remove all files and directories in the specified category.
     elif folders == []:
