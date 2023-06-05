@@ -2,19 +2,18 @@
 
 Author: jon-chow
 Created: 2023-05-20
-Last Modified: 2023-05-28
+Last Modified: 2023-06-05
 """
 
-import re
-import requests
 import lxml
 import cchardet
+from requests import Session, get
 from bs4 import BeautifulSoup
 
 from utils.settings import *
 from utils.helpers import *
 
-requests_session = requests.Session()
+requests_session = Session()
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -25,7 +24,7 @@ def get_all_artifacts_names():
     
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Artifact/Sets")
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.text, "lxml")
     
     # Find artifacts list.
     artifacts_div = soup.find("span", {"id": "List_of_Artifact_Sets"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
@@ -53,7 +52,7 @@ def scrape_artifacts(query=""):
     
     # Get HTML data from main page.
     response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.text, "lxml")
     
     artifact_info_div = soup.find("aside", {"role": "region"})
     star_info_div = artifact_info_div.find_all("section")[1].find("div").find("ul")

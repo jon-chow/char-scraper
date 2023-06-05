@@ -2,20 +2,22 @@
 
 Author: jon-chow
 Created: 2023-05-19
-Last Modified: 2023-05-28
+Last Modified: 2023-06-04
 """
 
-import json
-import os
+import shutil
 import sys
 import time
 import colorama
+from json import dump
+from os import path, makedirs
 from colorama import Fore, Back, Style
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils.helpers import paginate_output
 from utils.settings import *
 from utils.scrapers import scrape, get_all_names
+
 
 colorama.init(autoreset=True)
 
@@ -27,25 +29,21 @@ def create_json(category=DEFAULT_CATEGORY, folders=[], lang=LANG):
     start_time = time.time()
     
     # Get all if none are specified.
-    if folders == []:
-        folders = get_all_names(category=category)
+    folders = get_all_names(category=category) if folders == [] else folders
     
     def create_folder(folder):
         """Creates a folder for each folder name."""
         folder_name = folder.replace(' ', '-').replace("'", '').replace('"', '').replace('(', '').replace(')', '').lower()
-        folder_dir = f"{DATA_SAVE_DIR}{category}/{folder_name}"
+        folder_dir = path.join(DATA_SAVE_DIR, category, folder_name)
         try:
             data = scrape(category=category, query=folder)
-            # Create directory if it doesn't exist.
-            if not os.path.exists(folder_dir):
-                os.makedirs(folder_dir)
-            # Create JSON file.
-            with open(f"{folder_dir}/{lang}.json", "w") as f:
-                json.dump(data, f, indent=2)
-                return (f"{Fore.CYAN}Created {folder_dir}/{lang}.json")
+            makedirs(folder_dir, exist_ok=True)
+            with open(path.join(folder_dir, f"{lang}.json"), "w", encoding="utf-8") as f:
+                dump(data, f, indent=2, ensure_ascii=False)
+            return f"{Fore.CYAN}Created {path.join(folder_dir, f'{lang}.json')}"
         except Exception as e:
             # Failed to create JSON file.
-            return (f"{Fore.RED}Error: {e}")
+            return f"{Fore.RED}Error: {e}"
     
     # Create a folder for each folder name.
     with ThreadPoolExecutor(max_workers=10) as executor:
@@ -58,36 +56,22 @@ def clear(category="", folders=[]):
     """Removes specified folders and its files."""
     # Remove all files and directories in all categories.
     if category == "":
-        for root, dirs, files in os.walk(DATA_SAVE_DIR, topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-            for name in dirs:
-                dir_dir = os.path.join(root, name).replace('\\', '/')
-                os.rmdir(dir_dir)
-                print(f"{Fore.CYAN}Removed {dir_dir}")
-                    
+        shutil.rmtree(DATA_SAVE_DIR)
+        print(f"{Fore.CYAN}Removed {DATA_SAVE_DIR}")
+        
     # Remove all files and directories in the specified category.
     elif folders == []:
         folder_dir = f"{DATA_SAVE_DIR}{category}"
-        if os.path.exists(folder_dir):
-            for root, dirs, files in os.walk(folder_dir, topdown=False):
-                for name in files:
-                    os.remove(os.path.join(root, name))
-                for name in dirs:
-                    dir_dir = os.path.join(root, name).replace('\\', '/')
-                    os.rmdir(dir_dir)
-                    print(f"{Fore.CYAN}Removed /{dir_dir}")
-                
+        shutil.rmtree(folder_dir)
+        print(f"{Fore.CYAN}Removed {folder_dir}")  
+               
     # Remove specified files and directory in the specified category.
     else:
         for (folder) in folders:
             folder = folder.replace(' ', '-').replace("'", '').replace('"', '').replace('(', '').replace(')', '').lower()
             folder_dir = f"{DATA_SAVE_DIR}{category}/{folder}"
-            if os.path.exists(folder_dir):
-                for file in os.listdir(folder_dir):
-                    os.remove(f"{folder_dir}/{file}")
-                os.rmdir(folder_dir)
-                print(f"{Fore.CYAN}Removed {folder_dir}")
+            shutil.rmtree(folder_dir)
+            print(f"{Fore.CYAN}Removed {folder_dir}")
 
 
 def list_category(category=""):
@@ -96,16 +80,14 @@ def list_category(category=""):
     # List all categories.
     if category == "":
         print(f"{Fore.CYAN}List of {Fore.YELLOW}Categories:")
-        for (item) in Category:
-            items.append(item.value.title())
+        items = list(map(lambda x: x.value.title(), Category))
         items.sort(key=lambda x: x.lower())
     
     # List all items for the given category.
     else:
         data = get_all_names(category=category)
         print(f"{Fore.CYAN}List of {Fore.YELLOW}{category.title()} ({data.__len__()}):")
-        for (item) in data:
-            items.append(item)
+        items = list(map(lambda x: x, data))
         items.sort(key=lambda x: x.lower())
     
     # Paginate output.
@@ -119,49 +101,36 @@ def main():
     """Main function."""
     if len(sys.argv) > 1:
         function = sys.argv[1]
-        
-        match function:
-            # Clear function.
-            case Functions.CLEAR.value:
-                try:
-                    if len(sys.argv) > 2:
-                        category = sys.argv[2]
-                        if len(sys.argv) > 3:
-                            folders = sys.argv[3:]
-                            clear(category=category, folders=folders)
-                        else:
-                            clear(category=category)
-                    else:
-                        clear()
-                except Exception as e:
-                    raise Exception(f"Invalid category '{category}' does not exist.")
-            
-            # Create function.
-            case Functions.CREATE.value:
-                try:
-                    category = sys.argv[2]
-                    if len(sys.argv) > 3:
-                        folders = sys.argv[3:]
-                        create_json(category=category, folders=folders)
-                    else:
-                        create_json(category=category)
-                except Exception as e:
-                    raise Exception(f"Invalid category '{category}' does not exist.")
-            
-            # List function.
-            case Functions.LIST.value:
-                try:
-                    if len(sys.argv) > 2:
-                        category = sys.argv[2]
-                        list_category(category=category)
-                    else:
-                        list_category()
-                except Exception as e:
-                    raise Exception(f"Invalid category '{category}' does not exist.")
-            
-            # Unknown function.
-            case _:
-                raise Exception(f"Invalid function '{function}' does not exist.")
+
+        # Run the CLEAR function.
+        if function == Functions.CLEAR.value:
+            category = sys.argv[2] if len(sys.argv) > 2 else ""
+            folders = sys.argv[3:] if len(sys.argv) > 3 else []
+            try:
+                clear(category=category, folders=folders)
+            except Exception as e:
+                raise Exception(f"Invalid category '{category}' does not exist.")
+
+        # Run the CREATE function.
+        elif function == Functions.CREATE.value:
+            category = sys.argv[2]
+            folders = sys.argv[3:] if len(sys.argv) > 3 else []
+            try:
+                create_json(category=category, folders=folders)
+            except Exception as e:
+                raise Exception(f"Invalid category '{category}' does not exist.")
+
+        # Run the LIST function.
+        elif function == Functions.LIST.value:
+            category = sys.argv[2] if len(sys.argv) > 2 else ""
+            try:
+                list_category(category=category)
+            except Exception as e:
+                raise Exception(f"Invalid category '{category}' does not exist.")
+
+        # Invalid function.
+        else:
+            raise Exception(f"Invalid function '{function}' does not exist.")
     else:
         raise Exception(f"Missing arguments.")
 

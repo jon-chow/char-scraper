@@ -11,7 +11,7 @@
   "rarity": 4,
   "constellation": "Lepus",
   "birthday": "0000-08-10",
-  "description": "Always energetic and full of life, Amber's the best - albeit only - Outrider of the Knights of Favonius.",
+  "description": "Always energetic and full of life, Amber's the best — albeit only — Outrider of the Knights of Favonius.",
   "skillTalents": [
     {
       "name": "Sharpshooter",
@@ -63,7 +63,7 @@
       "description": "The ever-reliable Baron Bunny takes the stage.\n\nBaron BunnyContinuously taunts the enemy, drawing their fire.Baron Bunny's HP scales with Amber's Max HP.When destroyed or when its timer expires, Baron Bunny explodes, dealing AoE Pyro DMG.\nHold\nAdjusts the throwing direction of Baron Bunny.\nThe longer the button is held, the further the throw.",
       "upgrades": [
         {
-          "name": "Inherited HP (%\u00a0Max HP)",
+          "name": "Inherited HP (% Max HP)",
           "value": "41.4%"
         },
         {
@@ -169,7 +169,7 @@
     {
       "type": "Alternate",
       "name": "100% Outrider",
-      "description": "Amber's outfit. This is a more formal - but no less cool - version of the Outrider's uniform!",
+      "description": "Amber's outfit. This is a more formal — but no less cool — version of the Outrider's uniform!",
       "rarity": 4,
       "price": 0,
       "image": "outfit-100%-outrider"

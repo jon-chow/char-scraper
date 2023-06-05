@@ -2,20 +2,20 @@
 
 Author: jon-chow
 Created: 2023-05-20
-Last Modified: 2023-05-28
+Last Modified: 2023-06-05
 """
 
 import json
-import re
-import requests
 import lxml
 import cchardet
+from re import search
+from requests import Session, get
 from bs4 import BeautifulSoup
 
 from utils.settings import *
 from utils.helpers import *
 
-requests_session = requests.Session()
+requests_session = Session()
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -26,7 +26,7 @@ def get_all_characters_names():
     
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Character/List")
-    mainSoup = BeautifulSoup(response.content, "lxml")
+    mainSoup = BeautifulSoup(response.text, "lxml")
     
     # Find playable characters list.
     playable_characters_div = mainSoup.find("span", {"id": "Playable_Characters"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
@@ -56,7 +56,7 @@ def scrape_travelers(resonance="Anemo"):
     
     # Get HTML data from main page.
     mainRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/Traveler_({resonance})")
-    mainSoup = BeautifulSoup(mainRes.content, "lxml")
+    mainSoup = BeautifulSoup(mainRes.text, "lxml")
     
     talent_div = mainSoup.find("table", {"class": "talent-table"})
     constellation_div = mainSoup.find("table", {"class": "constellation-table"})
@@ -221,13 +221,13 @@ def scrape_characters(query=""):
     
     # Get HTML data from main page.
     mainRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
-    mainSoup = BeautifulSoup(mainRes.content, "lxml")
+    mainSoup = BeautifulSoup(mainRes.text, "lxml")
     # Get HTML data from lore page.
     loreRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}/Lore")
-    loreSoup = BeautifulSoup(loreRes.content, "lxml")
+    loreSoup = BeautifulSoup(loreRes.text, "lxml")
     # Get HTML data from outfits page.
     outfitsRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}/Outfits")
-    outfitsSoup = BeautifulSoup(outfitsRes.content, "lxml")
+    outfitsSoup = BeautifulSoup(outfitsRes.text, "lxml")
     
     char_info_div = mainSoup.find("aside", {"role": "region"})
     char_details_div = char_info_div.find("section", {"class": "wds-tabber"})
@@ -240,7 +240,7 @@ def scrape_characters(query=""):
     data["vision"] = char_info_div.find("td", {"data-source": "element"}).text.strip()
     data["weapon"] = char_info_div.find("td", {"data-source": "weapon"}).text.strip()
     
-    if re.search("Female", char_details_div.find("a", {"title": "Model Type"}).find_parent("h3").find_next_sibling("div").text.strip()):
+    if search("Female", char_details_div.find("a", {"title": "Model Type"}).find_parent("h3").find_next_sibling("div").text.strip()):
         data["gender"] = "Female"
     else:
         data["gender"] = "Male"
@@ -261,7 +261,7 @@ def scrape_characters(query=""):
     data["rarity"] = get_int_from_string(char_info_div.find("td", {"data-source": "quality"}).find("img").get("alt"))
     data["constellation"] = char_details_div.find("div", {"data-source": "constellation"}).find("h3").find_next_sibling().text.strip().replace(" (Story Quest Chapter)", "")
     data["birthday"] = get_birthday_from_string(char_details_div.find("div", {"data-source": "birthday"}).find("h3").find_next_sibling().text.strip())
-    data["description"] = loreSoup.find_all("p", {"class": "pull-quote__text"})[1].text.strip().replace("\u2014", "-")
+    data["description"] = loreSoup.find_all("p", {"class": "pull-quote__text"})[1].text.strip()
     
     # Get skill talents data.
     skill_talents = []
@@ -392,10 +392,10 @@ def scrape_characters(query=""):
             outfit_type = tr.find_all("td")[3].find("a").text.strip()
             
             outfitRes = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{name.replace(' ', '_')}")
-            outfitSoup = BeautifulSoup(outfitRes.content, "lxml")
+            outfitSoup = BeautifulSoup(outfitRes.text, "lxml")
             
             outfit_desc_div = outfitSoup.find("aside", {"role": "region"})
-            outfit_desc = outfit_desc_div.find("div", {"data-source": "description"}).find("div").text.strip().replace("\u2014", "-")
+            outfit_desc = outfit_desc_div.find("div", {"data-source": "description"}).find("div").text.strip()
             
             if outfit_type == "Alternate":
                 price = 0

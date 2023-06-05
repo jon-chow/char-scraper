@@ -2,19 +2,19 @@
 
 Author: jon-chow
 Created: 2023-05-28
-Last Modified: 2023-05-28
+Last Modified: 2023-06-05
 """
 
-import re
-import requests
+import json
 import lxml
 import cchardet
+from requests import Session, get
 from bs4 import BeautifulSoup
 
 from utils.settings import *
 from utils.helpers import *
 
-requests_session = requests.Session()
+requests_session = Session()
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -25,7 +25,7 @@ def get_all_elements_names():
     
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Element")
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.text, "lxml")
     
     # Find elements list.
     elements_div = soup.find("span", {"id": "List_of_Elements"}).find_parent("h2").find_next_sibling("i").find_next_sibling("ul")
@@ -52,7 +52,7 @@ def scrape_elements(query=""):
     
     # Get HTML data from main page.
     response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.text, "lxml")
     
     element_info_div = soup.find("aside", {"role": "region"})
     resonances_div = soup.find("span", {"id": "Elemental_Resonance"}).find_parent("h2").find_next_sibling("p").find_next_sibling("ul")

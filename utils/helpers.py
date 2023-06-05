@@ -2,12 +2,12 @@
 
 Author: jon-chow
 Created: 2023-05-20
-Last Modified: 2023-05-28
+Last Modified: 2023-06-05
 """
 
-import math
 import colorama
 from colorama import Fore, Back, Style
+from math import ceil, floor, log10
 from pynput.keyboard import Key, KeyCode, Listener
 
 
@@ -28,16 +28,19 @@ def title_case(string):
     Capitalizes words in parentheses i.e. "prized isshin blade (awakened)" -> "Prized Isshin Blade (Awakened)".
     Ignores capitalization of prepositions.
     """
-    prepositions = ["a", "an", "the", "at", "by", "for", "in", "of", "on", "to", "up", "and", "as", "but", "it", "or", "nor"]
+    prepositions = {"a", "an", "the", "at", "by", "for", "in", "of", "on", "to", "up", "and", "as", "but", "it", "or", "nor"}
     words = string.split(" ")
-    for i in range(len(words)):
-        if "-" in words[i]:
-            words[i] = "-".join([word.capitalize() for word in words[i].split("-")])
-        elif "(" in words[i]:
-            words[i] = "(".join([word.capitalize() for word in words[i].split("(")])
-        elif words[i] not in prepositions:
-            words[i] = words[i].capitalize()
-    return " ".join(words)
+    capitalized_words = []
+
+    for word in words:
+        if "-" in word:
+            word = "-".join([w.capitalize() for w in word.split("-")])
+        elif "(" in word:
+            word = "(".join([w.capitalize() for w in word.split("(")])
+        elif word not in prepositions:
+            word = word.capitalize()
+        capitalized_words.append(word)
+    return " ".join(capitalized_words)
 
 
 def convert_month_to_num(month):
@@ -60,36 +63,25 @@ def convert_month_to_num(month):
 
 def convert_to_percentage_string(string):
     """Converts numbers to percentage string."""
-    if "+" in string:
-        return f"{round(float(string.split('+')[0]), 1)}% + {round(float(string.split('+')[1]), 1)}%"
-    else:
-        return f"{round(float(string), 1)}%"
+    return f"{round(float(string.split('+')[0]), 1)}% + {round(float(string.split('+')[1]), 1)}%" if "+" in string else f"{round(float(string), 1)}%"
 
 
 def get_birthday_from_string(string):
     """Extracts birthday from string."""
     month = convert_month_to_num(string.split(" ")[0])
     day = string.split(" ")[1][:-2]
-    # Add leading zero if day is single digit.
-    if len(day) == 1:
-        day = f"0{day}"
-    return f"0000-{month}-{day}"
+    return f"0000-{month}-0{day}" if len(day) == 1 else f"0000-{month}-{day}"
 
 
 def parse_for_first_item_string(element):
     """Parses an element to get the first string."""
-    if element.find("ul"):
-        return element.find_all("li")[0].text.strip()
-    elif element.find("a"):
-        return element.text.strip()
-    else:
-        return element.text.strip()
+    return element.find_all("li")[0].text.strip() if element.find("ul") else element.text.strip()
 
 
 def paginate_output(lines, max_items):
     """Paginates outputs to the terminal."""
     total_lines = len(lines)
-    total_pages = math.ceil(total_lines / max_items)
+    total_pages = ceil(total_lines / max_items)
     current_page = 1
     
     def print_items():
@@ -98,7 +90,7 @@ def paginate_output(lines, max_items):
         start = (current_page - 1) * max_items
         end = start + max_items
         page_lines = lines[start:end]
-        LEADING_ZEROS = math.floor(math.log10(total_lines)) + 1
+        LEADING_ZEROS = floor(log10(total_lines)) + 1
         
         # Clear and print page.
         print("\033c", end="")

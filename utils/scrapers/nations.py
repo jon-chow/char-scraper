@@ -2,19 +2,19 @@
 
 Author: jon-chow
 Created: 2023-05-28
-Last Modified: 2023-05-28
+Last Modified: 2023-06-05
 """
 
-import re
-import requests
+import json
 import lxml
 import cchardet
+from requests import Session, get
 from bs4 import BeautifulSoup
 
 from utils.settings import *
 from utils.helpers import *
 
-requests_session = requests.Session()
+requests_session = Session()
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -25,7 +25,7 @@ def get_all_nations_names():
     
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Teyvat")
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.text, "lxml")
     
     # Find nations list.
     nations_div = soup.find("span", {"id": "Major_Nations"}).find_parent("h2").find_next_sibling("table").find("tbody")
@@ -52,10 +52,10 @@ def scrape_nations(query=""):
     
     # Get HTML data from main page.
     response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.text, "lxml")
     # Get HTML data from Teyvat page.
     response2 = requests_session.get("https://genshin-impact.fandom.com/wiki/Teyvat")
-    soup2 = BeautifulSoup(response2.content, "lxml")
+    soup2 = BeautifulSoup(response2.text, "lxml")
     
     nation_info_div = soup.find("aside", {"role": "region"})
     archon_info_div = soup2.find("a", {"title": query}).find_parent("td").find_next_sibling("td").find_next_sibling("td")

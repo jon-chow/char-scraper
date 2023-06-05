@@ -2,19 +2,18 @@
 
 Author: jon-chow
 Created: 2023-05-28
-Last Modified: 2023-05-28
+Last Modified: 2023-06-05
 """
 
-import re
-import requests
 import lxml
 import cchardet
+from requests import Session, get
 from bs4 import BeautifulSoup
 
 from utils.settings import *
 from utils.helpers import *
 
-requests_session = requests.Session()
+requests_session = Session()
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
@@ -25,7 +24,7 @@ def get_all_bosses_names():
     
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Enemies_of_Note")
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.text, "lxml")
     
     # Find bosses list.
     bosses_div = soup.find("tbody")
@@ -52,7 +51,7 @@ def scrape_bosses(query=""):
     
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Enemies_of_Note")
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.text, "lxml")
     
     bosses_div = soup.find("tbody")
     
@@ -74,7 +73,7 @@ def scrape_bosses(query=""):
         
                     # Get HTML data from boss page.
                     response2 = requests_session.get(f"https://genshin-impact.fandom.com{challenge}")
-                    soup2 = BeautifulSoup(response2.content, "lxml")
+                    soup2 = BeautifulSoup(response2.text, "lxml")
                     
                     # Get boss description.
                     desc_div = soup2.find("span", {"id": "Boss_Description"}).find_parent("h2").find_next_sibling("div").find("div", {"class": "description-content"})
