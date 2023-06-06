@@ -16,7 +16,7 @@ from utils.scrapers import scrape, get_all_names
 
 colorama.init(autoreset=True)
 
-TESTS_DIR = "tests/data"
+TESTS_DIR = "__tests__/data"
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
