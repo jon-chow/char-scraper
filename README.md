@@ -8,14 +8,7 @@ This is a scraper for data on things from the game "Genshin Impact". Data is scr
 - [Make](https://www.gnu.org/software/make/) (optional)
 
 ## Dependencies
-- [BeautifulSoup4](https://pypi.org/project/beautifulsoup4/)
-- [Requests](https://pypi.org/project/requests/)
-- [Colorama](https://pypi.org/project/colorama/) (for coloured terminal output)
-- [cChardet](https://pypi.org/project/cchardet/)
-- [lxml](https://pypi.org/project/lxml/)
-- [Pynput](https://pypi.org/project/pynput/) (for keyboard input)
-- [Pytest](https://pypi.org/project/pytest/) (for testing)
-- [Pytest-xdist](https://pypi.org/project/pytest-xdist/) (for parallel testing)
+A list of dependencies can be found in the [Pipfile](Pipfile) under the `[packages]` section.
 
 ## Usage
 ```bash

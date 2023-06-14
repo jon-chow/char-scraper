@@ -5,58 +5,77 @@ Created: 2023-06-13
 Last Modified: 2023-06-13
 """
 
-import flask
 import json
-from flask_cors import CORS
+import uvicorn
+import fastapi
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from main import genshin_scraper
 
 
-# Setup Flask app.
-app = flask.Flask(__name__)
-CORS(app)
+# ---------------------------------------------------------------------------- #
+#                                     SETUP                                    #
+# ---------------------------------------------------------------------------- #
+app = fastapi.FastAPI()
+
+origins = [
+  "http://localhost:3000",
+]
+
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=origins,
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
+
+class RunParams(BaseModel):
+  function: str = ""
+  category: str | None = ""
+  folders: list | None = []
+
 
 # ---------------------------------------------------------------------------- #
 #                                    ROUTES                                    #
 # ---------------------------------------------------------------------------- #
 
-@app.route('/')
+@app.get('/')
 def hello_world():
   """Main route."""
   return 'Hello, World!'
 
 
-# @app.route('/data', methods=['GET'])
-# def data():
-#   """
-#   Returns the data from the JSON files.
-#   GET /data
-#   """
-#   with open("data/chars.json", "r") as f:
-#     data = json.load(f)
-#   return flask.jsonify(data)
-
-
-@app.route('/run', methods=['POST'])
-def run():
+@app.post('/run')
+async def run(body: RunParams):
   """
   Runs the scraper with the specified parameters.
   POST /run
   """
   try:
-    data = flask.request.get_json()
-    
     # Get parameters.
-    function = "" if "function" not in data else data["function"]
-    category = "" if "category" not in data else data["category"]
-    folders = [] if "folders" not in data else data["folders"]
+    function = "" if body.function is None else body.function
+    category = "" if body.category is None else body.category
+    folders = [] if body.folders is None else body.folders
     
     genshin_scraper(function=function, category=category, folders=folders)
   except Exception as e:
-    return flask.jsonify({"success": False, "error": str(e)})
+    return {
+      "status": "error",
+      "message": str(e),
+    }
   
-  return flask.jsonify({"success": True})
+  return {
+    "status": "success",
+    "message": "Successfully ran scraper.",
+  }
 
 
 if __name__ == '__main__':
-  app.run("localhost", 3001, threaded=True, debug=True)
+  uvicorn.run(
+    "server:app",
+    host="localhost",
+    port=3001,
+    reload=True,
+  )

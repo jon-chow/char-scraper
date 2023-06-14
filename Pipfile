@@ -12,8 +12,9 @@ lxml = "*"
 pytest = "*"
 pytest-xdist = "*"
 pynput = "*"
-flask = "*"
-flask-cors = "*"
+fastapi = "*"
+uvicorn = "*"
+pydantic = "*"
 
 [dev-packages]
 
