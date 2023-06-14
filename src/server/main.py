@@ -2,7 +2,7 @@
 
 Author: jon-chow
 Created: 2023-05-19
-Last Modified: 2023-06-04
+Last Modified: 2023-06-13
 """
 
 import shutil
@@ -97,15 +97,11 @@ def list_category(category=""):
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
 # ---------------------------------------------------------------------------- #
-def main():
-    """Main function."""
-    if len(sys.argv) > 1:
-        function = sys.argv[1]
-
+def genshin_scraper(function, category="", folders=[]):
+    """Main function for running the script."""
+    try:
         # Run the CLEAR function.
         if function == Functions.CLEAR.value:
-            category = sys.argv[2] if len(sys.argv) > 2 else ""
-            folders = sys.argv[3:] if len(sys.argv) > 3 else []
             try:
                 clear(category=category, folders=folders)
             except Exception as e:
@@ -113,8 +109,8 @@ def main():
 
         # Run the CREATE function.
         elif function == Functions.CREATE.value:
-            category = sys.argv[2]
-            folders = sys.argv[3:] if len(sys.argv) > 3 else []
+            if category == "":
+                raise Exception("A category is required.")
             try:
                 create_json(category=category, folders=folders)
             except Exception as e:
@@ -122,7 +118,6 @@ def main():
 
         # Run the LIST function.
         elif function == Functions.LIST.value:
-            category = sys.argv[2] if len(sys.argv) > 2 else ""
             try:
                 list_category(category=category)
             except Exception as e:
@@ -131,12 +126,16 @@ def main():
         # Invalid function.
         else:
             raise Exception(f"Invalid function '{function}' does not exist.")
-    else:
-        raise Exception(f"Missing arguments.")
+    except Exception as e:
+        raise e
 
 
 if __name__ == "__main__":
     try:
-        main()
+        function = "" if len(sys.argv) < 2 else sys.argv[1]
+        category = "" if len(sys.argv) < 3 else sys.argv[2]
+        folders = [] if len(sys.argv) < 4 else sys.argv[3:]
+        
+        genshin_scraper(function, category, folders)
     except Exception as e:
         print(f"{Fore.RED}Error: {e}")

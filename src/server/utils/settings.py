@@ -36,6 +36,6 @@ class Category(Enum):
 DEFAULT_CATEGORY = Category.CHARACTERS.value
 
 # Files and directories.
-DATA_SAVE_DIR = "assets/data/"
-IMG_SAVE_DIR = "assets/images/"
+DATA_SAVE_DIR = "src/assets/data/"
+IMG_SAVE_DIR = "src/assets/images/"
 LANG = "en"
