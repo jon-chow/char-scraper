@@ -2,7 +2,7 @@
 
 Author: jon-chow
 Created: 2023-05-20
-Last Modified: 2023-06-05
+Last Modified: 2023-06-14
 """
 
 import json
@@ -225,7 +225,7 @@ def scrape_characters(query=""):
     
     char_info_div = mainSoup.find("aside", {"role": "region"})
     char_details_div = char_info_div.find("section", {"class": "wds-tabber"})
-    talent_div = mainSoup.find("div", {"class": "talent-table-container"})
+    talent_div = mainSoup.find("table", {"class": "talent-table"})
     constellation_div = mainSoup.find("table", {"class": "constellation-table"})
     
     # Get character data.

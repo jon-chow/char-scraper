@@ -20,15 +20,7 @@ $ npm start
 
 ## Usage (CLI)
 ```bash
-$ python3 main.py "function" "category" "args[]"
-```
-
-```bash
 $ pipenv run dev "function" "category" "args[]"
-```
-
-```bash
-$ make "function" "category" "args[]"
 ```
 
 > The `function` argument specifies which function to run:
@@ -43,47 +35,19 @@ Adding `args[]` is optional. If no `args[]` are provided, the program will scrap
 Example use for scraping the characters `"Amber"` and `"Lisa"`, run the following command:
 
 ```bash
-$ python3 main.py create characters amber lisa
-```
-<img src="__demos__/python_create_single.gif" alt="" width="fit-content">
-
-```bash
 $ pipenv run dev create characters amber lisa
 ```
 
-```bash
-$ make create characters amber lisa
-```
-<img src="__demos__/make_create_single.gif" alt="" width="fit-content">
-
-For characters with multi-word names, wrap their name around quotations (Python) or use hyphens (Make). For example, to scrape `"Kaedehara Kazuha"` and `"Kamisato Ayaka"`, run the following command:
-
-```bash
-$ python3 main.py create characters "kaedehara kazuha" "kamisato ayaka"
-```
-<img src="__demos__/python_create_multi.gif" alt="" width="fit-content">
+For characters with multi-word names, wrap their name around quotations (Python). For example, to scrape `"Kaedehara Kazuha"` and `"Kamisato Ayaka"`, run the following command:
 
 ```bash
 $ pipenv run dev create characters "kaedehara kazuha" "kamisato ayaka"
 ```
 
-```bash
-$ make create characters kaedehara-kazuha kamisato-ayaka
-```
-<img src="__demos__/make_create_multi.gif" alt="" width="fit-content">
-
 To clear the data of a category, change the `create` command to `clear`. For example, to clear the data of all characters, run the following command:
 
 ```bash
-$ python3 main.py clear characters
-```
-
-```bash
 $ pipenv run dev clear characters
-```
-
-```bash
-$ make clear characters
 ```
 
 ## License

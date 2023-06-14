@@ -2,7 +2,7 @@
 
 Author: jon-chow
 Created: 2023-05-19
-Last Modified: 2023-06-04
+Last Modified: 2023-06-14
 """
 
 import pytest
@@ -16,7 +16,7 @@ from utils.scrapers import scrape, get_all_names
 
 colorama.init(autoreset=True)
 
-TESTS_DIR = "__tests__/data"
+TESTS_DIR = "src/server/__tests__/data"
 
 # ---------------------------------------------------------------------------- #
 #                                   FUNCTIONS                                  #
