@@ -13,18 +13,65 @@
     <div class="container">
       <header>
         <h1 class="title">
-          <img src="images/icon.webp" alt="logo" width="40" height="40">
+          <img
+            src="images/icon.webp"
+            alt="icon"
+            width="40"
+            height="40"
+            draggable="false"
+          >
           Genshin Scraper
         </h1>
         <h2 class="subtitle">A Data Scraper for API Development</h2>
       </header>
 
       <main>
+        <img
+          id="image"
+          src="images/genshin.webp"
+          alt="genshin"
+          width="auto"
+          height="150" 
+          draggable="false"
+        >
 
+        <div class="options">
+          <label for="function">Function:</label>
+          <select id="function">
+            <option value="create">Create</option>
+            <option value="clear">Clear</option>
+          </select>
+
+          <label for="category">Category:</label>
+          <select id="category">
+            <option value="artifacts">Artifacts</option>
+            <option value="bosses">Bosses</option>
+            <option value="characters">Characters</option>
+            <option value="elements">Elements</option>
+            <option value="nations">Nations</option>
+            <option value="weapons">Weapons</option>
+          </select>
+          
+          <button
+            id="scrape"
+            onclick="scrape()"
+          >
+            Scrape
+          </button>
+        </div>
       </main>
 
       <footer>
+        <blockquote>
+          Genshin Scraper isn't affiliated nor endorsed by miHoYo and doesn't reflect the views or opinions
+          of miHoYo or anyone officially involved in producing or managing Genshin Impact.
+          Genshin Impact and miHoYo are trademarks or registered trademarks of miHoYo.
+          Genshin Impact &copy; miHoYo.
+        </blockquote>
 
+        <blockquote>
+          Built with ❤️ by <a href="https://github.com/jon-chow">jon-chow</a>.
+        </blockquote>
       </footer>
     </div>
   </body>
