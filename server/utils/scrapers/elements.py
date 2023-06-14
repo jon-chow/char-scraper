@@ -28,29 +28,24 @@ def get_all_elements_names():
     soup = BeautifulSoup(response.text, "lxml")
     
     # Find elements list.
-    elements_div = soup.find("span", {"id": "List_of_Elements"}).find_parent("h2").find_next_sibling("i").find_next_sibling("ul")
+    elements_lis = soup.find("span", {"id": "List_of_Elements"}).find_parent("h2").find_next_sibling("i").find_next_sibling("ul").find_all("li")
     
     # Get names.
-    for li in elements_div.find_all("li"):
+    for li in elements_lis:
         try:
-            name = li.find("a").get("title")
-            names.append(name)
+            names.append(li.find("a").get("title"))
         except:
             pass
     
-    if names != []:
-        return names
-    else:
-        return False
+    return names if names != [] else False
 
 
+# TODO: REFACTOR THIS
 def scrape_elements(query=""):
     """Scrape element data from the wiki."""
-    data = {}
-    
-    query = title_case(query).replace('"', '').replace(' ', '_')
-    
     # Get HTML data from main page.
+    data = {}
+    query = title_case(query).replace('"', '').replace(' ', '_')
     response = requests_session.get(f"https://genshin-impact.fandom.com/wiki/{query}")
     soup = BeautifulSoup(response.text, "lxml")
     

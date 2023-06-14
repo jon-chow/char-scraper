@@ -21,29 +21,23 @@ requests_session = Session()
 # ---------------------------------------------------------------------------- #
 def get_all_nations_names():
     """Get all nation names from the wiki."""
-    names = []
-    
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Teyvat")
     soup = BeautifulSoup(response.text, "lxml")
-    
-    # Find nations list.
-    nations_div = soup.find("span", {"id": "Major_Nations"}).find_parent("h2").find_next_sibling("table").find("tbody")
+    nations_trs = soup.find("tbody").find_all("tr")
     
     # Get names.
-    for tr in nations_div.find_all("tr"):
+    names = []
+    for tr in nations_trs:
         try:
-            name = tr.find("td").find_all("a")[1].get("title")
-            names.append(name)
+            names.append(tr.find("td").find_all("a")[1].get("title"))
         except:
             pass
     
-    if names != []:
-        return names
-    else:
-        return False
+    return names if names != [] else False
 
 
+# TODO: REFACTOR THIS
 def scrape_nations(query=""):
     """Scrape nation data from the wiki."""
     data = {}

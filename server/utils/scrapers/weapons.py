@@ -32,29 +32,23 @@ def rename_location(string):
 
 def get_all_weapons_names():
     """Get all weapon names from the wiki."""
-    names = []
-    
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Weapon/List")
     soup = BeautifulSoup(response.text, "lxml")
-    
-    # Find playable characters list.
-    weapons_div = soup.find("span", {"id": "List_of_All_Weapons"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
+    weapons_trs = soup.find("tbody").find_all("tr")
     
     # Get names.
-    for tr in weapons_div.find_all("tr"):
+    names = []
+    for tr in weapons_trs:
         try:
-            name = tr.find("td").find("a").get("title")
-            names.append(name)
+            names.append(tr.find("td").find("a").get("title"))
         except:
             pass
     
-    if names != []:
-        return names
-    else:
-        return False
+    return names if names != [] else False
 
 
+# TODO: REFACTOR THIS
 def scrape_weapons(query=""):
     """Scrape weapon data from the wiki."""
     data = {}

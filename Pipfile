@@ -12,12 +12,14 @@ lxml = "*"
 pytest = "*"
 pytest-xdist = "*"
 pynput = "*"
+flask = "*"
+flask-cors = "*"
 
 [dev-packages]
 
 [scripts]
-test = "py.test test.py -vv -n auto"
-dev = "python main.py"
+test = "py.test server/test.py -vv -n auto"
+dev = "python server/main.py"
 
 [requires]
 python_version = "3.10"

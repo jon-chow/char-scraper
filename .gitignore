@@ -1,3 +1,7 @@
-# Logs
+# Workspace
+.vscode/
+
+# Logs & temp files
 assets/
+.pytest_cache/
 __pycache__

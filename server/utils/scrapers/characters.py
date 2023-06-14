@@ -22,34 +22,28 @@ requests_session = Session()
 # ---------------------------------------------------------------------------- #
 def get_all_characters_names():
     """Get all character names from the wiki."""
-    names = []
-    
     # Get HTML data from main page.
     response = requests_session.get("https://genshin-impact.fandom.com/wiki/Character/List")
-    mainSoup = BeautifulSoup(response.text, "lxml")
-    
-    # Find playable characters list.
-    playable_characters_div = mainSoup.find("span", {"id": "Playable_Characters"}).find_parent("h2").find_next_sibling("p").find_next_sibling("table").find("tbody")
+    soup = BeautifulSoup(response.text, "lxml")
+    characters_trs = soup.find("tbody").find_all("tr")
     
     # Get names.
-    for tr in playable_characters_div.find_all("tr"):
+    names = []
+    for tr in characters_trs:
         try:
             name = tr.find("td").find("a").get("title")
             if name != "Traveler":
                 names.append(name)
             else:
                 elements = ["Unaligned", "Anemo", "Geo", "Electro", "Dendro"] # "Hydro", "Pyro", "Cryo"
-                for element in elements:
-                    names.append(f"Traveler ({element})")
+                names.extend([f"Traveler ({element})" for element in elements])
         except:
             pass
     
-    if names != []:
-        return names
-    else:
-        return False
+    return names if names != [] else False
 
 
+# TODO: REFACTOR THIS
 def scrape_travelers(resonance="Anemo"):
     """Scrape traveler data from the wiki."""
     data = {}
