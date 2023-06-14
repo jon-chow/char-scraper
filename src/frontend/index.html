@@ -43,13 +43,18 @@
           </select>
 
           <label for="category">Category:</label>
-          <select id="category">
+          <select id="category" onchange="checkEnableFolders()">
+            <option value="">None</option>
             <option value="artifacts">Artifacts</option>
             <option value="bosses">Bosses</option>
             <option value="characters">Characters</option>
             <option value="elements">Elements</option>
             <option value="nations">Nations</option>
             <option value="weapons">Weapons</option>
+          </select>
+
+          <label for="folders">Folders:</label>
+          <select id="folders" multiple disabled>
           </select>
           
           <button

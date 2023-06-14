@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from main import genshin_scraper
+from utils.scrapers import get_all_names
 
 
 # ---------------------------------------------------------------------------- #
@@ -31,6 +32,9 @@ app.add_middleware(
   allow_headers=["*"],
 )
 
+class GetParams(BaseModel):
+  category: str | None = ""
+
 class RunParams(BaseModel):
   function: str = ""
   category: str | None = ""
@@ -45,6 +49,30 @@ class RunParams(BaseModel):
 def hello_world():
   """Main route."""
   return 'Hello, World!'
+
+
+@app.post('/get')
+async def get(body: GetParams):
+  """
+  Gets the data from the specified category.
+  POST /get
+  """
+  data = []
+  try:
+    # Get parameters.
+    category = "" if body.category is None else body.category
+    
+    data = get_all_names(category=category) if category != "" else []
+  except Exception as e:
+    return {
+      "status": "error",
+      "message": str(e),
+    }
+  
+  return {
+    "status": "success",
+    "message": data,
+  }
 
 
 @app.post('/run')
