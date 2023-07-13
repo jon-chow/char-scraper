@@ -1,7 +1,8 @@
 {
-  "scripts": {
-    "ui": "start http://localhost:3000/ & python -m http.server -b localhost 3000 --directory src/frontend",
-    "server": "python src/server/server.py",
-    "start": "concurrently \"npm run server\" \"npm run ui\""
-  }
+	"scripts": {
+		"ui": "start http://localhost:3000/ & python -m http.server -b localhost 3000 --directory src/frontend",
+		"server": "python src/server/server.py",
+		"test": "py.test src/server/test.py -vv -n auto",
+		"start": "concurrently \"npm run server\" \"npm run ui\""
+	}
 }

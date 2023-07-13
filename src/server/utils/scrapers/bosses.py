@@ -29,7 +29,7 @@ def get_all_bosses_names():
     names = []
     for tr in bosses_trs:
         try:
-            names.append(tr.find("td").find("span", {"class": "item_text"}).find("a").text.strip())
+            names.append(tr.find("span", {"class": "item-text"}).find("a").text.strip())
         except:
             pass
     
@@ -50,7 +50,7 @@ def scrape_bosses(query=""):
         # Get correct page and general data.
         for tr in bosses_div.find_all("tr"):
             try:
-                name = tr.find("td").find("span", {"class": "item_text"}).find("a").text.strip()
+                name = tr.find("span", {"class": "item-text"}).find("a").text.strip()
                 if query.lower() == name.replace('"', '').replace(' ', '_').lower():
                     data["name"] = name
                     title = tr.find_all("td")[1].text.strip()
