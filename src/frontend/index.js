@@ -20,40 +20,95 @@ getXmlHttpRequestObject = function() {
 
 
 /**
+ * Changes the image of the dropdown for the specified dropdown.
+ * @param {String} dropdownId - Id of the dropdown.
+ * @param {String} image - Image name.
+ */
+function changeDropdownImage(dropdownId, image) {
+  let dropdown = document.getElementById(dropdownId + "-dropdown");
+  let dropdownImage = dropdown.getElementsByTagName("img")[0];
+  dropdownImage.src = `images/${image}.webp`;
+};
+
+
+/**
+ * Adds options to the functions select.
+ * @param {Array} folderNames - Array of folder names.
+ */
+function addFolderOptions(folderNames) {
+  let folders = document.getElementById("folders");
+
+  for (var i = 0; i < folderNames.length; i++) {
+    let option = document.createElement("option");
+    option.text = folderNames[i];
+    option.value = folderNames[i].toLowerCase();
+    folders.add(option);
+  };
+};
+
+
+/**
+ * Updates the session storage with folder names for a category. \
+ * @param {Array} folders - Array of folder names.
+ * @param {String} category - Category name.
+ */
+function updateFolders(folders, category) {
+  let foldersObj = [];
+  for (var i = 0; i < folders.length; i++)
+    foldersObj.push(folders[i]);
+
+  // Create object to store in session storage.
+  let obj = {};
+  let fromSession = JSON.parse(sessionStorage.getItem("folderNames"));
+  if (fromSession === null) {
+    obj[category] = foldersObj;
+  } else {
+    obj = fromSession;
+    obj[category] = foldersObj;
+  };
+
+  sessionStorage.setItem("folderNames", JSON.stringify(obj));
+};
+
+
+/**
  * Gathers the possible functions from the server. \
  * Populates the folders select with folders from the selected category.
  * @path /get
+ * @async
  */
 async function populateFolders(category) {
-	var xhr = getXmlHttpRequestObject();
+  let fromSession = JSON.parse(sessionStorage.getItem("folderNames"));
 
-	xhr.onreadystatechange = function () {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			let res = JSON.parse(xhr.responseText);
-      let folders = document.getElementById("folders");
+  if (fromSession === null || fromSession[category] === undefined) {
+    var xhr = getXmlHttpRequestObject();
 
-      // Clear folders.
-      folders.innerHTML = "";
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        let res = JSON.parse(xhr.responseText);
+        let folders = document.getElementById("folders");
 
-      // Populate folders.
-      for (var i = 0; i < res.message.length; i++) {
-        let option = document.createElement("option");
-        option.text = res.message[i];
-        option.value = res.message[i].toLowerCase();
-        folders.add(option);
-      };
-		}
-	};
+        // Refresh folders select.
+        folders.innerHTML = "";
+        updateFolders(res.message, category);
+        addFolderOptions(res.message);
+      }
+    };
 
-	xhr.open("POST", "http://localhost:3001/get", true);
-	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.open("POST", "http://localhost:3001/get", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-	// Set parameters.
-	const body = {
-		category: category.toLowerCase(),
-	};
+    // Set parameters.
+    const body = {
+      category: category.toLowerCase(),
+    };
 
-	xhr.send(JSON.stringify(body));
+    xhr.send(JSON.stringify(body));
+  } else {
+    let folders = document.getElementById("folders");
+    folders.innerHTML = "";
+    addFolderOptions(fromSession[category]);
+  };
 };
 
 
@@ -65,13 +120,16 @@ function checkEnableFolders() {
 	let category = document.getElementById("category");
 	let folders = document.getElementById("folders");
 
-	folders.disabled = (category.children[category.selectedIndex].text.toLowerCase() === "none");
+  let selection = category.children[category.selectedIndex].text.toLowerCase();
 
-  if (!folders.disabled) {
-    populateFolders(category.children[category.selectedIndex].text);
-  } else {
+	folders.disabled = selection === "none";
+
+  if (folders.disabled)
     folders.innerHTML = "";
-  };
+  else
+    populateFolders(selection);
+  
+  changeDropdownImage("category", selection);
 };
 
 

@@ -10,11 +10,12 @@
   </head>
 
   <body>
+    <img id="background" src="images/background.webp" alt="" draggable="false">
     <div class="container">
       <header>
         <h1 class="title">
           <img
-            src="images/icon.webp"
+            src="images/artifacts.webp"
             alt="icon"
             width="40"
             height="40"
@@ -27,7 +28,7 @@
 
       <main>
         <img
-          id="image"
+          id="logo"
           src="images/genshin.webp"
           alt="genshin"
           width="auto"
@@ -43,15 +44,18 @@
           </select>
 
           <label for="category">Category:</label>
-          <select id="category" onchange="checkEnableFolders()">
-            <option value="">None</option>
-            <option value="artifacts">Artifacts</option>
-            <option value="bosses">Bosses</option>
-            <option value="characters">Characters</option>
-            <option value="elements">Elements</option>
-            <option value="nations">Nations</option>
-            <option value="weapons">Weapons</option>
-          </select>
+          <div class="dropdown" id="category-dropdown">
+            <img src="images/none.webp" alt="" draggable="false">
+            <select id="category" onchange="checkEnableFolders()">
+              <option value="">None</option>
+              <option value="artifacts">Artifacts</option>
+              <option value="bosses">Bosses</option>
+              <option value="characters">Characters</option>
+              <option value="elements">Elements</option>
+              <option value="nations">Nations</option>
+              <option value="weapons">Weapons</option>
+            </select>
+          </div>
 
           <label for="folders">Folders:</label>
           <select id="folders" multiple disabled>
