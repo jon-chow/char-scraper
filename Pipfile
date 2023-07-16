@@ -15,6 +15,7 @@ pynput = "*"
 fastapi = "*"
 uvicorn = "*"
 pydantic = "*"
+slowapi = "*"
 
 [dev-packages]
 

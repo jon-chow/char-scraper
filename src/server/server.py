@@ -2,13 +2,16 @@
 
 Author: jon-chow
 Created: 2023-06-13
-Last Modified: 2023-06-14
+Last Modified: 2023-07-15
 """
 
 import json
 import uvicorn
-import fastapi
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 from pydantic import BaseModel
 
 from main import genshin_scraper
@@ -18,7 +21,12 @@ from utils.scrapers import get_all_names
 # ---------------------------------------------------------------------------- #
 #                                     SETUP                                    #
 # ---------------------------------------------------------------------------- #
-app = fastapi.FastAPI()
+
+limiter = Limiter(key_func=get_remote_address)
+app = FastAPI()
+app.title = "Genshin JSON Data Generator API"
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 origins = [
   "http://localhost:3000",
@@ -45,14 +53,9 @@ class RunParams(BaseModel):
 #                                    ROUTES                                    #
 # ---------------------------------------------------------------------------- #
 
-@app.get('/')
-def hello_world():
-  """Main route."""
-  return 'Hello, World!'
-
-
 @app.post('/get')
-async def get(body: GetParams):
+@limiter.limit("1/second")
+async def get(request: Request, body: GetParams):
   """
   Gets the data from the specified category.
   POST /get
@@ -76,7 +79,8 @@ async def get(body: GetParams):
 
 
 @app.post('/run')
-async def run(body: RunParams):
+@limiter.limit("1/second")
+async def run(request: Request, body: RunParams):
   """
   Runs the scraper with the specified parameters.
   POST /run

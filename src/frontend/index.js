@@ -1,21 +1,26 @@
 /*
  * Author: jon-chow
  * Created: 2023-06-13
- * Last Modified: 2023-06-13
+ * Last Modified: 2023-07-15
  */
 
+const SERVER = "http://localhost:3001";
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  FUNCTIONS                                 */
+/* -------------------------------------------------------------------------- */
 
 /**
  * Returns an XMLHttpRequest object.
  */
-getXmlHttpRequestObject = function() {
-  if (window.XMLHttpRequest) {
-    return new XMLHttpRequest();
-  } else if (window.ActiveXObject) {
-    return new ActiveXObject("Microsoft.XMLHTTP");
-  } else {
-    alert("Your browser doesn't support the XmlHttpRequest object. Better upgrade to Firefox.");
-  };
+function getXmlHttpRequestObject() {
+	if (window.XMLHttpRequest)
+		return new XMLHttpRequest();
+	else if (window.ActiveXObject)
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	else
+		alert("Your browser doesn't support the XmlHttpRequest object.");
 };
 
 
@@ -72,6 +77,31 @@ function updateFolders(folders, category) {
 
 
 /**
+ * Checks if the user has selected a category. \
+ * Enables the folders select if true.
+ */
+function checkEnableFolders() {
+	let category = document.getElementById("category");
+	let folders = document.getElementById("folders");
+
+  let selection = category.children[category.selectedIndex].text.toLowerCase();
+
+	folders.disabled = selection === "none";
+
+  if (folders.disabled)
+    folders.innerHTML = "";
+  else
+    populateFolders(selection);
+  
+  changeDropdownImage("category", selection);
+};
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  REQUESTS                                  */
+/* -------------------------------------------------------------------------- */
+
+/**
  * Gathers the possible functions from the server. \
  * Populates the folders select with folders from the selected category.
  * @path /get
@@ -95,7 +125,7 @@ async function populateFolders(category) {
       }
     };
 
-    xhr.open("POST", "http://localhost:3001/get", true);
+    xhr.open("POST", `${SERVER}/get`, true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
     // Set parameters.
@@ -113,27 +143,6 @@ async function populateFolders(category) {
 
 
 /**
- * Checks if the user has selected a category. \
- * Enables the folders select if true.
- */
-function checkEnableFolders() {
-	let category = document.getElementById("category");
-	let folders = document.getElementById("folders");
-
-  let selection = category.children[category.selectedIndex].text.toLowerCase();
-
-	folders.disabled = selection === "none";
-
-  if (folders.disabled)
-    folders.innerHTML = "";
-  else
-    populateFolders(selection);
-  
-  changeDropdownImage("category", selection);
-};
-
-
-/**
  * Calls the scrape endpoint on the server.
  * @path /run
  */
@@ -147,7 +156,7 @@ function scrape() {
     };
   };
 
-  xhr.open("POST", "http://localhost:3001/run", true);
+  xhr.open("POST", `${SERVER}/run`, true);
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
   let func = document.getElementById("function");
